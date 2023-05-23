@@ -19,9 +19,7 @@ import lombok.Setter;
 @NoArgsConstructor
 public class Public_Transport_Pass extends Travel_Document {
 	
-	@Id 
-	@GeneratedValue
-	private UUID id;
+
 	
 	public enum SubType {SETTIMANALE, MENSILE};
 	private SubType subType;

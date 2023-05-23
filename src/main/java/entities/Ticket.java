@@ -19,9 +19,7 @@ import lombok.Setter;
 @NoArgsConstructor
 public class Ticket extends Travel_Document{
 	
-	@Id 
-	@GeneratedValue
-	private UUID id;
+	
 	private boolean endorsed;
 	
 	public Ticket(UUID id, LocalDate dataEmissione, UUID puntoEmissione, UUID id2, boolean endorsed) {
