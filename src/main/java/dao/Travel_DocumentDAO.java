@@ -33,11 +33,16 @@ public class Travel_DocumentDAO {
 	}
 	
 	public void delete(String id) {
-		Travel_Document found = em.find(Travel_Document.class, UUID.fromString(id));
-		if (found != null) {
+		try {
+			Travel_Document found = em.find(Travel_Document.class, UUID.fromString(id));
+			if (found != null) {
 			em.remove(found);
 			System.out.println("Travel Document with id " + id + " deleted!");
 		}
+		} catch (Exception e) {
+			log.info("Errore nell'eliminazione: " + e);
+		}
+		
 	}
 	
 	public void getTotalDocumentsIssued() {
