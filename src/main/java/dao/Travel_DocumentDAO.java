@@ -20,11 +20,16 @@ public class Travel_DocumentDAO {
 	
 	public void save(Travel_Document a) {
 		EntityTransaction t = em.getTransaction();
-		t.begin();
-		em.persist(a);
-		t.commit();
-		log.info("Travel Document saved!");
-		Travel_Document.incrementDocumentsIssued(a.getPuntoEmissione());
+		try {
+			t.begin();
+			em.persist(a);
+			t.commit();
+			log.info("Travel Document saved!");
+			Travel_Document.incrementDocumentsIssued(a.getPuntoEmissione());
+		} catch (Exception e) {
+			log.info("Saving error: " + e);
+		}
+		
 	}
 	
 	public Travel_Document findByUUID(String id) {
@@ -40,22 +45,31 @@ public class Travel_DocumentDAO {
 			System.out.println("Travel Document with id " + id + " deleted!");
 		}
 		} catch (Exception e) {
-			log.info("Errore nell'eliminazione: " + e);
+			log.info("Delete error: " + e);
 		}
 		
 	}
 	
 	public void getTotalDocumentsIssued() {
-		log.info("The total number of travel documents sold is: " + Travel_Document.getTotalDocumentsIssued());
+		try {
+			int x = Travel_Document.getTotalDocumentsIssued();
+			log.info("The total number of travel documents sold is: " + x);
+		} catch (Exception e) {
+			log.info("No data found" + e);
+		}
 	}
 	
-	
 	public void printDocumentsIssuedBySeller() {
-	    Map<UUID, Integer> documentsIssuedBySeller = Travel_Document.getDocumentsIssuedBySeller();
+		try {
+			Map<UUID, Integer> documentsIssuedBySeller = Travel_Document.getDocumentsIssuedBySeller();
 	    for (Map.Entry<UUID, Integer> entry : documentsIssuedBySeller.entrySet()) {
 	        UUID sellerId = entry.getKey();
 	        int numDocumentsIssued = entry.getValue();
 	        log.info("Seller ID: " + sellerId + ", Number of Documents Issued: " + numDocumentsIssued);
 	    }
+		} catch (Exception e) {
+			log.info("Error trying fetching the results" + e);
+		}
+	    
 	}
 }
