@@ -14,7 +14,7 @@ import lombok.Setter;
 @Table(name = "utente")
 @Getter
 @Setter
-public class utente {
+public class user {
 	@Id
 	@GeneratedValue
 	protected UUID Id;
@@ -22,11 +22,11 @@ public class utente {
 	protected String lastName;
 	
 	
-	public utente() {
+	public user() {
 		
 	};
 	
-	public utente(String name, String lastName) {
+	public user(String name, String lastName) {
 		this.name = name;
 		this.lastName = lastName;
 	};

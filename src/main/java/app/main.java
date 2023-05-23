@@ -9,10 +9,10 @@ import org.slf4j.LoggerFactory;
 
 import ch.qos.logback.classic.Logger;
 import util.JpaUtil;
-import entities.utente;
-import entities.tessera;
-import dao.utenteDao;
-import dao.tesseraDao;
+import entities.user;
+import entities.card;
+import dao.userDao;
+import dao.cardDao;
 
 
 public class main {
@@ -24,38 +24,38 @@ public class main {
 	public static void main(String[] args) {
 		
 		EntityManager em = emf.createEntityManager();
-		utenteDao ud = new utenteDao(em);
-		tesseraDao td = new tesseraDao(em);
+		userDao ud = new userDao(em);
+		cardDao td = new cardDao(em);
 		
 		
 	// creazione utenti
 		
-		utente p1 = new utente("Giovanni", "Storti");
-		utente p2 = new utente("Aldo", "Baglio");
-		utente p3 = new utente("Giovanni", "Rossi");
-		utente p4 = new utente("Giacomo", "Poretti");
+		user p1 = new user("Giovanni", "Storti");
+		user p2 = new user("Aldo", "Baglio");
+		user p3 = new user("Giovanni", "Rossi");
+		user p4 = new user("Giacomo", "Poretti");
 		
 	// creazione tessere 
 		
-		tessera t1 = new tessera(LocalDate.of(2022, 3, 24), false);
-		tessera t2 = new tessera(LocalDate.of(2023, 3, 24), true);
-		tessera t3 = new tessera(LocalDate.of(2021, 5, 24), false);
-		tessera t4 = new tessera(LocalDate.of(2023, 2, 24), true);
-		tessera t5 = new tessera(LocalDate.of(2023, 5, 24), true);
+		card t1 = new card(LocalDate.of(2022, 3, 24), false);
+		card t2 = new card(LocalDate.of(2023, 3, 24), true);
+		card t3 = new card(LocalDate.of(2021, 5, 24), false);
+		card t4 = new card(LocalDate.of(2023, 2, 24), true);
+		card t5 = new card(LocalDate.of(2023, 5, 24), true);
 		
 		
 	// salvataggio in DB
 		
-		ud.saveUtente(p1);
-		ud.saveUtente(p2);
-		ud.saveUtente(p3);
-		ud.saveUtente(p4);
+		ud.saveUser(p1);
+		ud.saveUser(p2);
+		ud.saveUser(p3);
+		ud.saveUser(p4);
 		
-		td.saveTessera(t1);
-		td.saveTessera(t2);
-		td.saveTessera(t3);
-		td.saveTessera(t4);
-		td.saveTessera(t5);
+		td.saveCard(t1);
+		td.saveCard(t2);
+		td.saveCard(t3);
+		td.saveCard(t4);
+		td.saveCard(t5);
 	}
 
 }

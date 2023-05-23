@@ -8,28 +8,28 @@ import javax.persistence.EntityTransaction;
 import org.slf4j.LoggerFactory;
 
 import ch.qos.logback.classic.Logger;
-import entities.tessera;
+import entities.card;
 
-public class tesseraDao {
-	private static Logger logger = (Logger) LoggerFactory.getLogger(utenteDao.class);
+public class cardDao {
+	private static Logger logger = (Logger) LoggerFactory.getLogger(cardDao.class);
 	
 	private final EntityManager em;
 
-	public tesseraDao(EntityManager em) {
+	public cardDao(EntityManager em) {
 		this.em = em;
 	}
 	
 	
-	public void saveTessera(tessera a) {
+	public void saveCard(card a) {
 		EntityTransaction t = em.getTransaction();
 		t.begin();
 		em.persist(a);
 		t.commit();
-		logger.info("Tessera salvata!!");
+		logger.info("Card saved!!");
 	}
 	
-	public tessera findById(String id) {
-		tessera found = em.find(tessera.class, UUID.fromString(id));
+	public card findById(String id) {
+		card found = em.find(card.class, UUID.fromString(id));
 		return found;
 	}
 }

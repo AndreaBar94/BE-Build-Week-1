@@ -15,7 +15,7 @@ import lombok.Setter;
 @Table(name = "tessera")
 @Getter
 @Setter
-public class tessera {
+public class card {
 	@Id
 	@GeneratedValue
 	protected UUID Id;
@@ -23,11 +23,11 @@ public class tessera {
 	protected LocalDate dataScadenza;
 	protected boolean validità;
 	
-	public tessera() {
+	public card() {
 		
 	};
 	
-	public tessera(LocalDate dataAttivazione, boolean validità) {
+	public card(LocalDate dataAttivazione, boolean validità) {
 		this.dataAttivazione = dataAttivazione;
 		this.dataScadenza = dataAttivazione.plusYears(1);
 		this.validità = validità;

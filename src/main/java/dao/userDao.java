@@ -8,28 +8,28 @@ import javax.persistence.EntityTransaction;
 import org.slf4j.LoggerFactory;
 
 import ch.qos.logback.classic.Logger;
-import entities.utente;
+import entities.user;
 
-public class utenteDao {
-	private static Logger logger = (Logger) LoggerFactory.getLogger(utenteDao.class);
+public class userDao {
+	private static Logger logger = (Logger) LoggerFactory.getLogger(userDao.class);
 	
 	private final EntityManager em;
 
-	public utenteDao(EntityManager em) {
+	public userDao(EntityManager em) {
 		this.em = em;
 	}
 	
 	
-	public void saveUtente(utente a) {
+	public void saveUser(user a) {
 		EntityTransaction t = em.getTransaction();
 		t.begin();
 		em.persist(a);
 		t.commit();
-		logger.info("Utente salvato!!");
+		logger.info("Saved user!!");
 	}
 	
-	public utente findById(String id) {
-		utente found = em.find(utente.class, UUID.fromString(id));
+	public user findById(String id) {
+		user found = em.find(user.class, UUID.fromString(id));
 		return found;
 	}
 }
