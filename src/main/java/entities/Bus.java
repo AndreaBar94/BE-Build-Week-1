@@ -23,4 +23,11 @@ public class Bus extends Vehicle {
 	public void setCapacity(int capacity) {
 		this.capacity = capacity;
 	}
+
+	@Override
+	public String toString() {
+		return "Bus{" + "id=" + getId() + ", state=" + getState() + ", ticketsValidated=" + getTicketsValidated()
+				+ ", capacity=" + capacity + '}';
+	}
+
 }
