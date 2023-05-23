@@ -1,5 +1,9 @@
 Manifest-Version: 1.0
-Built-By: andreabarocchi
+<<<<<<< HEAD
+Built-By: Alfonso
+=======
+Built-By: ptn_3manuele
+>>>>>>> emanuele2.0
 Build-Jdk: 17.0.7
 Created-By: Maven Integration for Eclipse
 
