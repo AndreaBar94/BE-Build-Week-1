@@ -3,6 +3,7 @@ package entities;
 import javax.persistence.Entity;
 
 @Entity
+
 public class Bus extends Vehicle {
 	private int capacity;
 
