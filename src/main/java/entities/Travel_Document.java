@@ -20,7 +20,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class Travel_Document {
+public abstract class Travel_Document {
 	
 	@Id
 	@GeneratedValue
