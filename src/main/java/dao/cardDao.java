@@ -49,7 +49,7 @@ public class cardDao {
 		}
 	}
 	
-	public void deleteCard(UUID id) {
+	public void deleteCard( UUID id) {
 		EntityTransaction t = em.getTransaction();
 		
 		try {

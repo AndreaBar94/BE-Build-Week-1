@@ -22,7 +22,7 @@ public class userDao {
 		this.em = em;
 	}
 	
-	public List<user> getAllCard() {
+	public List<user> getAllUser() {
 		try {
 			TypedQuery<user> query = em.createQuery("SELECT u FROM user u", user.class);
 			List<user> users = query.getResultList();
