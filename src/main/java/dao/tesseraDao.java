@@ -25,7 +25,7 @@ public class tesseraDao {
 		t.begin();
 		em.persist(a);
 		t.commit();
-		logger.info("Utente salvato!!");
+		logger.info("Tessera salvata!!");
 	}
 	
 	public tessera findById(String id) {
