@@ -9,12 +9,14 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table(name = "tessera")
+@Table(name = "card")
 @Getter
 @Setter
+@NoArgsConstructor
 public class card {
 	@Id
 	@GeneratedValue
@@ -22,15 +24,12 @@ public class card {
 	protected LocalDate dataAttivazione;
 	protected LocalDate dataScadenza;
 	protected boolean validità;
+
 	
-	public card() {
-		
-	};
-	
-	public card(LocalDate dataAttivazione, boolean validità) {
+	public card(LocalDate dataAttivazione) {
 		this.dataAttivazione = dataAttivazione;
 		this.dataScadenza = dataAttivazione.plusYears(1);
-		this.validità = validità;
+		this.validità = true;
 	};
 	
 	@Override
