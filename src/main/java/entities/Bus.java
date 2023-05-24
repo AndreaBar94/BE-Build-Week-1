@@ -28,7 +28,10 @@ public class Bus extends Vehicle {
 	@Override
 	public String toString() {
 		return "Bus{" + "id=" + getId() + ", state=" + getState() + ", ticketsValidated=" + getTicketsValidated()
-				+ ", capacity=" + capacity + '}';
+				+ ", capacity=" + capacity + ", serviceStartDate=" + getServiceStartDate() + ", maintenanceStartDate="
+				+ getMaintenanceStartDate() + ", maintenanceCount=" + getMaintenanceCount()
+				+ ", totalMaintenanceDuration=" + getTotalMaintenanceDuration() + ", serviceCount=" + getServiceCount()
+				+ ", totalServiceDuration=" + getTotalServiceDuration() + '}';
 	}
 
 }

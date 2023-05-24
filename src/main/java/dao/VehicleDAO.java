@@ -1,5 +1,7 @@
 package dao;
 
+import java.time.Duration;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
@@ -13,6 +15,7 @@ import org.slf4j.LoggerFactory;
 import entities.Bus;
 import entities.Tram;
 import entities.Vehicle;
+import entities.Vehicle.State;
 
 public class VehicleDAO {
 	private static final Logger logger = LoggerFactory.getLogger(VehicleDAO.class);
@@ -105,4 +108,72 @@ public class VehicleDAO {
 			throw e;
 		}
 	}
+
+	public void endService(UUID id) {
+		EntityTransaction transaction = em.getTransaction();
+		try {
+			transaction.begin();
+
+			Vehicle vehicle = em.find(Vehicle.class, id);
+			if (vehicle != null) {
+				if (vehicle.getState() == State.IN_SERVICE) {
+					vehicle.setState(State.UNDER_MAINTENANCE);
+					vehicle.setMaintenanceStartDate(LocalDate.now());
+					LocalDate endDate = LocalDate.now();
+					Duration serviceDuration = Duration.between(vehicle.getServiceStartDate().atStartOfDay(),
+							endDate.atStartOfDay());
+					vehicle.setTotalServiceDuration(vehicle.getTotalServiceDuration().plus(serviceDuration));
+					vehicle.setServiceCount(vehicle.getServiceCount() + 1);
+				} else {
+					logger.info("Vehicle with ID " + id + " is not in service.");
+				}
+			} else {
+				logger.info("No vehicle found with ID " + id);
+			}
+
+			transaction.commit();
+			logger.info("Service ended successfully for vehicle with ID: " + id);
+		} catch (Exception e) {
+			if (transaction.isActive()) {
+				transaction.rollback();
+			}
+			logger.error("Error occurred while ending service for vehicle with ID: " + id, e);
+			throw e;
+		}
+	}
+
+	public void endMaintenance(UUID id) {
+		EntityTransaction transaction = em.getTransaction();
+		try {
+			transaction.begin();
+
+			Vehicle vehicle = em.find(Vehicle.class, id);
+			if (vehicle != null) {
+				if (vehicle.getState() == State.UNDER_MAINTENANCE) {
+					vehicle.setState(State.IN_SERVICE);
+					vehicle.setServiceStartDate(LocalDate.now());
+					LocalDate endDate = LocalDate.now();
+					Duration maintenanceDuration = Duration.between(vehicle.getMaintenanceStartDate().atStartOfDay(),
+							endDate.atStartOfDay());
+					vehicle.setTotalMaintenanceDuration(
+							vehicle.getTotalMaintenanceDuration().plus(maintenanceDuration));
+					vehicle.setMaintenanceCount(vehicle.getMaintenanceCount() + 1);
+				} else {
+					logger.info("Vehicle with ID " + id + " is not under maintenance.");
+				}
+			} else {
+				logger.info("No vehicle found with ID " + id);
+			}
+
+			transaction.commit();
+			logger.info("Maintenance ended successfully for vehicle with ID: " + id);
+		} catch (Exception e) {
+			if (transaction.isActive()) {
+				transaction.rollback();
+			}
+			logger.error("Error occurred while ending maintenance for vehicle with ID: " + id, e);
+			throw e;
+		}
+	}
+
 }
