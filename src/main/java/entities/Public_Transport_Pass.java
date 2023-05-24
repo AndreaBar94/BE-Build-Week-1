@@ -19,7 +19,6 @@ import lombok.Setter;
 @NoArgsConstructor
 public class Public_Transport_Pass extends Travel_Document {
 	
-
 	
 	public enum SubType {SETTIMANALE, MENSILE};
 	private SubType subType;
