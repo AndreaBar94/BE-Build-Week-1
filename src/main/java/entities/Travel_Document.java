@@ -1,8 +1,6 @@
 package entities;
 
 import java.time.LocalDate;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.UUID;
 
 import javax.persistence.Entity;
@@ -10,7 +8,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
-
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -25,32 +24,20 @@ public abstract class Travel_Document {
 	@Id
 	@GeneratedValue
 	protected UUID id;
+	
 	protected LocalDate dataEmissione;
-	//@ManyToOne(mappedBy = Rivenditore autorizzato)
-	protected UUID puntoEmissione;
 	
-	public static int totalDocumentsIssued = 0;
-	private static Map<UUID, Integer> documentsIssuedBySeller = new HashMap<>();
+	@ManyToOne
+	@JoinColumn(name = "authorizeddealer_id")
+	protected AuthorizedDealer puntoEmissione;
+
 	
-	public Travel_Document(UUID id, LocalDate dataEmissione, UUID puntoEmissione) {
-		super();
-		this.id = id;
+	public Travel_Document(LocalDate dataEmissione, AuthorizedDealer puntoEmissione) {
 		this.dataEmissione = dataEmissione;
 		this.puntoEmissione = puntoEmissione;
-		incrementDocumentsIssued(puntoEmissione);
-	}
-	
-	public static void incrementDocumentsIssued(UUID puntoEmissione) {
-		totalDocumentsIssued++;
-		documentsIssuedBySeller.put(puntoEmissione, documentsIssuedBySeller.getOrDefault(puntoEmissione, 0) + 1);
-	}
-	
-	public static int getTotalDocumentsIssued() {
-		return totalDocumentsIssued;
+		 if (puntoEmissione != null) {
+	            this.puntoEmissione.incrementDocCounter();
+	        }
 	}
 
-	public static Map<UUID, Integer> getDocumentsIssuedBySeller() {
-		return documentsIssuedBySeller;
-	}
-	
 }

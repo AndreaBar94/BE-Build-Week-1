@@ -9,3 +9,4 @@
 2023-05-23 10:50:01,338 [Worker-4: Building] WARN  o.e.m.c.i.embedder.EclipseLogger - Using platform encoding (UTF-8 actually) to copy filtered resources, i.e. build is platform dependent!
 2023-05-23 10:50:01,342 [Worker-4: Building] INFO  o.e.m.c.i.embedder.EclipseLogger - skip non existing resourceDirectory /Users/ptn_3manuele/Desktop/java EPICODE/s3/be-u1-w3-d5/w3_d5/src/test/resources
 >>>>>>> emanuele2.0
+2023-05-24 08:50:34,327 [Worker-7: Loading available Gradle versions] INFO  o.e.b.c.i.u.g.PublishedGradleVersions - Gradle version information cache is up-to-date. Trying to read.

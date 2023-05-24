@@ -1,11 +1,15 @@
 package dao;
 
+import java.util.List;
+
 import javax.persistence.EntityManager;
-import entities.AuthorizedDealer;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
-import java.util.List;
+import javax.persistence.TypedQuery;
+
+import entities.AuthorizedDealer;
+import entities.VendingMachine;
 
 public class DealersDAO {
     private EntityManagerFactory emf;
@@ -19,7 +23,7 @@ public class DealersDAO {
         EntityTransaction et = em.getTransaction();
         try {
             et.begin();
-            em.merge(authorizedDealer);
+            em.persist(authorizedDealer);
             et.commit();
         } catch (Exception e) {
             et.rollback();
@@ -41,8 +45,8 @@ public class DealersDAO {
     public List<AuthorizedDealer> getAllAuthorizedDealers() {
         EntityManager em = emf.createEntityManager();
         try {
-            return em.createNamedQuery("AuthorizedDealer.findAll", AuthorizedDealer.class)
-                    .getResultList();
+            TypedQuery<AuthorizedDealer> query = em.createNamedQuery("AuthorizedDealer.findAll", AuthorizedDealer.class);
+            return query.getResultList();
         } finally {
             em.close();
         }
@@ -73,6 +77,16 @@ public class DealersDAO {
         } catch (Exception e) {
             et.rollback();
             e.printStackTrace();
+        } finally {
+            em.close();
+        }
+    }
+
+    public List<VendingMachine> getAllVendingMachines() {
+        EntityManager em = emf.createEntityManager();
+        try {
+            TypedQuery<VendingMachine> query = em.createNamedQuery("VendingMachine.findAll", VendingMachine.class);
+            return query.getResultList();
         } finally {
             em.close();
         }

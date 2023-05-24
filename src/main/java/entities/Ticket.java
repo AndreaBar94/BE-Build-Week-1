@@ -3,9 +3,10 @@ package entities;
 import java.time.LocalDate;
 import java.util.UUID;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import lombok.Getter;
@@ -18,14 +19,18 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 public class Ticket extends Travel_Document{
+
 	
+	@ManyToOne
+	@JoinColumn(name = "user_id")
+	private User user;
 	
 	private boolean endorsed;
 	
-	public Ticket(UUID id, LocalDate dataEmissione, UUID puntoEmissione, UUID id2, boolean endorsed) {
-		super(id, dataEmissione, puntoEmissione);
-		id = id2;
+	public Ticket(LocalDate dataEmissione,  AuthorizedDealer puntoEmissione, boolean endorsed, User u) {
+		super(dataEmissione, puntoEmissione);
 		this.endorsed = endorsed;
+		this.user = u;
 	}
 		
 	

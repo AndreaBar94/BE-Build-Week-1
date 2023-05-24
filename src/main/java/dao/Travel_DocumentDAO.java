@@ -6,6 +6,7 @@ import java.util.UUID;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 
+import entities.AuthorizedDealer;
 import entities.Travel_Document;
 import lombok.extern.slf4j.Slf4j;
 
@@ -25,9 +26,12 @@ public class Travel_DocumentDAO {
 			em.persist(a);
 			t.commit();
 			log.info("Travel Document saved!");
-			Travel_Document.incrementDocumentsIssued(a.getPuntoEmissione());
 		} catch (Exception e) {
-			log.info("Saving error: " + e);
+			if (t.isActive()) {
+                t.rollback();
+            }
+            log.error("Errore durante il salvataggio del veicolo.", e);
+            throw e;
 		}
 		
 	}
@@ -50,26 +54,4 @@ public class Travel_DocumentDAO {
 		
 	}
 	
-	public void getTotalDocumentsIssued() {
-		try {
-			int x = Travel_Document.getTotalDocumentsIssued();
-			log.info("The total number of travel documents sold is: " + x);
-		} catch (Exception e) {
-			log.info("No data found" + e);
-		}
-	}
-	
-	public void printDocumentsIssuedBySeller() {
-		try {
-			Map<UUID, Integer> documentsIssuedBySeller = Travel_Document.getDocumentsIssuedBySeller();
-	    for (Map.Entry<UUID, Integer> entry : documentsIssuedBySeller.entrySet()) {
-	        UUID sellerId = entry.getKey();
-	        int numDocumentsIssued = entry.getValue();
-	        log.info("Seller ID: " + sellerId + ", Number of Documents Issued: " + numDocumentsIssued);
-	    }
-		} catch (Exception e) {
-			log.info("Error trying fetching the results" + e);
-		}
-	    
-	}
 }
