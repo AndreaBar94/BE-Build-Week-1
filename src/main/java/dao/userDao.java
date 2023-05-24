@@ -10,8 +10,8 @@ import javax.persistence.TypedQuery;
 import org.slf4j.LoggerFactory;
 
 import ch.qos.logback.classic.Logger;
-import entities.card;
-import entities.user;
+import entities.Card;
+import entities.User;
 
 public class userDao {
 	private static Logger logger = (Logger) LoggerFactory.getLogger(userDao.class);
@@ -22,11 +22,11 @@ public class userDao {
 		this.em = em;
 	}
 	
-	public List<user> getAllUser() {
+	public List<User> getAllUser() {
 		try {
-			TypedQuery<user> query = em.createQuery("SELECT u FROM user u", user.class);
-			List<user> users = query.getResultList();
-			for(user u : users) {
+			TypedQuery<User> query = em.createQuery("SELECT u FROM user u", User.class);
+			List<User> users = query.getResultList();
+			for(User u : users) {
 				logger.info(u.toString());
 			};
 			return users;
@@ -37,7 +37,7 @@ public class userDao {
 		
 	};
 	
-	public void saveUser(user a) {
+	public void saveUser(User a) {
 		
 		EntityTransaction t = em.getTransaction();
 		try {
@@ -58,7 +58,7 @@ public class userDao {
 		EntityTransaction t = em.getTransaction();
 		try {
 			t.begin();
-			user user = em.find(user.class, id);
+			User user = em.find(User.class, id);
 			em.remove(user);
 			t.commit();
 			logger.info("User delete");
@@ -67,8 +67,8 @@ public class userDao {
 		}
 	};
 	
-	public user findById(String id) {
-		user found = em.find(user.class, UUID.fromString(id));
+	public User findById(String id) {
+		User found = em.find(User.class, UUID.fromString(id));
 		return found;
 	}
 	

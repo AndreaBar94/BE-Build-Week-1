@@ -10,7 +10,7 @@ import javax.persistence.TypedQuery;
 import org.slf4j.LoggerFactory;
 
 import ch.qos.logback.classic.Logger;
-import entities.card;
+import entities.Card;
 
 public class cardDao {
 	private static Logger logger = (Logger) LoggerFactory.getLogger(cardDao.class);
@@ -21,11 +21,11 @@ public class cardDao {
 		this.em = em;
 	}
 	
-	public List<card> getAllCard() {
+	public List<Card> getAllCard() {
 		try {
-			TypedQuery<card> query = em.createQuery("SELECT c FROM card c", card.class);
-			List<card> cards = query.getResultList();
-			for(card c : cards) {
+			TypedQuery<Card> query = em.createQuery("SELECT c FROM card c", Card.class);
+			List<Card> cards = query.getResultList();
+			for(Card c : cards) {
 				logger.info(c.toString());
 			};
 			return cards;
@@ -36,7 +36,7 @@ public class cardDao {
 		
 	};
 	
-	public void saveCard(card a) {
+	public void saveCard(Card a) {
 		EntityTransaction t = em.getTransaction();
 		try {
 			t.begin();
@@ -54,7 +54,7 @@ public class cardDao {
 		
 		try {
 			t.begin();
-			card card = em.find(card.class, id);
+			Card card = em.find(Card.class, id);
 			em.remove(card);
 			t.commit();
 			logger.info("Removed Card");
@@ -63,8 +63,8 @@ public class cardDao {
 		}
 	};
 	
-	public card findById(String id) {
-		card found = em.find(card.class, UUID.fromString(id));
+	public Card findById(String id) {
+		Card found = em.find(Card.class, UUID.fromString(id));
 		return found;
 	}
 }
