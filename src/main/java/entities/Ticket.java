@@ -4,8 +4,6 @@ import java.time.LocalDate;
 import java.util.UUID;
 
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
 import javax.persistence.Table;
 
 import lombok.Getter;
@@ -22,9 +20,8 @@ public class Ticket extends Travel_Document{
 	
 	private boolean endorsed;
 	
-	public Ticket(UUID id, LocalDate dataEmissione, UUID puntoEmissione, UUID id2, boolean endorsed) {
-		super(id, dataEmissione, puntoEmissione);
-		id = id2;
+	public Ticket(LocalDate dataEmissione,  AuthorizedDealer puntoEmissione, boolean endorsed) {
+		super(dataEmissione, puntoEmissione);
 		this.endorsed = endorsed;
 	}
 		

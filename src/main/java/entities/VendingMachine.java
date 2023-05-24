@@ -1,26 +1,22 @@
 package entities;
 
-import java.io.Serializable;
-
 import javax.persistence.Entity;
 import javax.persistence.NamedQuery;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 @Entity
 @NamedQuery(name = "VendingMachine.findAll", query = "SELECT a FROM VendingMachine a")
-public class VendingMachine extends AuthorizedDealer implements Serializable {
+@Getter
+@Setter
+@NoArgsConstructor
+public class VendingMachine extends AuthorizedDealer{
+	
+
 	private boolean outOfOrder;
 
-	public boolean isOutOfOrder() {
-		return outOfOrder;
-	}
-
-	public void setOutOfOrder(boolean outOfOrder) {
-		this.outOfOrder= outOfOrder;
-	}
-
-	public VendingMachine() {
-		super();
-	}
 
 	@Override
 	public String toString() {

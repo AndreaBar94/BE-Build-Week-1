@@ -4,8 +4,6 @@ import java.time.LocalDate;
 import java.util.UUID;
 
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
 import javax.persistence.Table;
 
 import lombok.Getter;
@@ -25,10 +23,8 @@ public class Public_Transport_Pass extends Travel_Document {
 	
 	private boolean isValid;
 
-	public Public_Transport_Pass(UUID id, LocalDate dataEmissione, UUID puntoEmissione, UUID id2, SubType subType,
-			boolean isValid) {
-		super(id, dataEmissione, puntoEmissione);
-		id = id2;
+	public Public_Transport_Pass(LocalDate dataEmissione, AuthorizedDealer puntoEmissione, SubType subType, boolean isValid) {
+		super(dataEmissione, puntoEmissione);
 		this.subType = subType;
 		this.isValid = isValid;
 	}
