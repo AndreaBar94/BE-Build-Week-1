@@ -3,7 +3,6 @@ package entities;
 import java.time.LocalDate;
 import java.util.UUID;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -27,33 +26,24 @@ public class Card {
 	protected LocalDate dataAttivazione;
 	protected LocalDate dataScadenza;
 	protected boolean validità;
-	
-	@Column(name = "user_id")
-    private UUID userId;
-	
-	@Column(name = "pass_id")
-    private UUID passId;
-	
-	
-	@OneToOne(mappedBy = "card")
+
+	@OneToOne
 	@JoinColumn(name = "user_id")
 	private User user;
-	
+
 	@OneToOne(mappedBy = "card")
-    @JoinColumn(name = "pass_id")
-    private Public_Transport_Pass pass;
-	
-	public Card(LocalDate dataAttivazione, UUID userAssociato) {
+	@JoinColumn(name = "pass_id")
+	private Public_Transport_Pass pass;
+
+	public Card(LocalDate dataAttivazione) {
 		this.dataAttivazione = dataAttivazione;
 		this.dataScadenza = dataAttivazione.plusYears(1);
-		this.userId = userAssociato;
 		this.validità = true;
-		this.passId = null;
 	};
-	
-	
+
 	@Override
 	public String toString() {
-		return "Tessera n°= " + Id + " data di attivazione: " + dataAttivazione + " data di scadenza: " + dataScadenza + " validità: " + validità;
+		return "Tessera n°= " + Id + " data di attivazione: " + dataAttivazione + " data di scadenza: " + dataScadenza
+				+ " validità: " + validità;
 	};
 }
