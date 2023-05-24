@@ -32,6 +32,7 @@ public class card {
 		this.validità = true;
 	};
 	
+	
 	@Override
 	public String toString() {
 		return "Tessera n°= " + Id + " data di attivazione: " + dataAttivazione + " data di scadenza: " + dataScadenza + " validità: " + validità;
