@@ -239,27 +239,7 @@ public class VehicleDAO {
         }
 	}
 	
-//	public int docPerVehicleAndDate(Vehicle vehicle, LocalDate startDate, LocalDate endDate) {
-//	    try {
-//	        List<Ticket> tickets = em.createQuery(
-//	                "SELECT t FROM Ticket t WHERE t.vehicle = :vehicle " +
-//	                "AND t.endorsed = true " +
-//	                "AND t.dataVid >= :startDate " +
-//	                "AND t.dataVid <= :endDate", Ticket.class)
-//	                .setParameter("vehicle", vehicle)
-//	                .setParameter("startDate", startDate)
-//	                .setParameter("endDate", endDate)
-//	                .getResultList();
-//
-//	        int count = tickets.size();
-//	        logger.info("Numero di documenti vidimati per il mezzo selezionato nell'arco di tempo richiesto: " + count);
-//	        return count;
-//	    } catch (Exception e) {
-//	        logger.error("Si è verificato un errore durante il conteggio dei biglietti.", e);
-//	        return 0;
-//	    }
-//	}
-	
+
 	private List<Ticket> getDocumentsByVehicle(Vehicle vehicle) {
         try {
         	List<Ticket> found = vehicle.getTicketsList();
@@ -275,4 +255,5 @@ public class VehicleDAO {
         return !date.isBefore(startDate) && !date.isAfter(endDate);
     }
 
+	
 }

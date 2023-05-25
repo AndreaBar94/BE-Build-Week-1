@@ -54,14 +54,19 @@ public class Main {
 //		travelDAO.save(t2);
 //		travelDAO.save(t3);
 //		
+//
 //		Bus b1 = new Bus(10);
 //		vDAO.saveVehicle(b1);
+//		
+//		t1.setVehicle(b1);
+//		t2.setVehicle(b1);
+//		t3.setVehicle(b1);
 //		
 //		vDAO.validateTicket(t1.getId().toString(), b1.getId().toString());
 //		vDAO.validateTicket(t2.getId().toString(), b1.getId().toString());
 //		vDAO.validateTicket(t3.getId().toString(), b1.getId().toString());
 //		vDAO.saveVehicle(b1);
-		vDAO.docPerVehicleAndDate(vDAO.getVehicleById(UUID.fromString("6520dea2-55ff-46d8-b887-943a494b9670")), LocalDate.now().minusDays(1), LocalDate.now().plusDays(1));
+		vDAO.docPerVehicleAndDate(vDAO.getVehicleById(UUID.fromString("e4ea7b87-b7df-4376-81a5-d8a95dca1704")), LocalDate.now().minusDays(1), LocalDate.now().plusDays(1));
 		
 		
 		em.close();
