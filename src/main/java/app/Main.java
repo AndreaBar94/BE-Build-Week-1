@@ -9,8 +9,8 @@ import javax.persistence.EntityManagerFactory;
 import dao.DealersDAO;
 import dao.Travel_DocumentDAO;
 import dao.VehicleDAO;
-import dao.cardDao;
-import dao.userDao;
+import dao.CardDAO;
+import dao.UserDAO;
 import entities.AuthorizedDealer;
 import entities.Bus;
 import entities.Card;
@@ -27,8 +27,8 @@ public class Main {
 		EntityManagerFactory emf = JpaUtil.getEntityManagerFactory();
 		EntityManager em = emf.createEntityManager();
 
-		userDao userDao = new userDao(em);
-		cardDao cardDAO = new cardDao(em);
+		UserDAO userDao = new UserDAO(em);
+		CardDAO cardDAO = new CardDAO(em);
 		Travel_DocumentDAO travelDAO = new Travel_DocumentDAO(em);
 		DealersDAO dealersDAO = new DealersDAO(em);
 		VehicleDAO vehicleDAO = new VehicleDAO(em);
