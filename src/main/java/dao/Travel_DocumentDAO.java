@@ -1,5 +1,6 @@
 package dao;
 
+import java.time.LocalDate;
 import java.util.Map;
 import java.util.UUID;
 
@@ -7,6 +8,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 
 import entities.AuthorizedDealer;
+import entities.Public_Transport_Pass;
 import entities.Travel_Document;
 import lombok.extern.slf4j.Slf4j;
 
@@ -54,4 +56,33 @@ public class Travel_DocumentDAO {
 		
 	}
 	
+	public void checkValidity(String id) {
+	    Public_Transport_Pass pass = em.find(Public_Transport_Pass.class, UUID.fromString(id));
+	    
+	    if (pass.getSubType() == Public_Transport_Pass.SubType.SETTIMANALE) {
+	       
+	        LocalDate dataEmissione = pass.getDataEmissione();
+	        LocalDate now = LocalDate.now();
+	        LocalDate expirationDate = dataEmissione.plusWeeks(1);
+	        
+	        if (now.isBefore(expirationDate)) {
+	            System.out.println("L'abbonamento settimanale è ancora valido.");
+	        } else {
+	            System.out.println("L'abbonamento settimanale non è più valido.");
+	        }
+	    } else if (pass.getSubType() == Public_Transport_Pass.SubType.MENSILE) {
+	    
+	        LocalDate dataEmissione = pass.getDataEmissione();
+	        LocalDate now = LocalDate.now();
+	        LocalDate expirationDate = dataEmissione.plusMonths(1); 
+	        
+	        if (now.isBefore(expirationDate)) {
+	            System.out.println("L'abbonamento mensile è ancora valido.");
+	        } else {
+	            System.out.println("L'abbonamento mensile non è più valido.");
+	        }
+	    } else {
+	        System.out.println("Tipo di abbonamento non supportato.");
+	    }
+	}
 }

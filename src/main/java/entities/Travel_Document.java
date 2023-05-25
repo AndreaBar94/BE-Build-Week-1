@@ -28,6 +28,10 @@ public abstract class Travel_Document {
 	protected LocalDate dataEmissione;
 	
 	@ManyToOne
+	@JoinColumn(name = "vehicle_id")
+	protected Vehicle vehicle;
+	
+	@ManyToOne
 	@JoinColumn(name = "authorizeddealer_id")
 	protected AuthorizedDealer puntoEmissione;
 

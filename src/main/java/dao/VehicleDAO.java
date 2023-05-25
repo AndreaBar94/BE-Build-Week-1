@@ -13,7 +13,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import entities.Bus;
+import entities.Public_Transport_Pass;
+import entities.Ticket;
 import entities.Tram;
+import entities.Travel_Document;
 import entities.Vehicle;
 import entities.Vehicle.State;
 
@@ -40,7 +43,50 @@ public class VehicleDAO {
 			throw e;
 		}
 	}
+	
+	public void validateTicket(String travelDocID, String vID) {
+	    EntityTransaction transaction = null;
 
+	    try {
+	        transaction = em.getTransaction();
+	        transaction.begin();
+
+	        Travel_DocumentDAO tDAO = new Travel_DocumentDAO(em);
+	        Travel_Document td = tDAO.findByUUID(travelDocID);
+
+	        if (td instanceof Public_Transport_Pass) {
+	            if (((Public_Transport_Pass) td).isValid()) {
+	                logger.info("Pass valido!");
+	            } else {
+	                logger.info("Aaaaaaaah facciamo una bella multina qui!");
+	            }
+	        } else if (td instanceof Ticket) {
+	            Ticket ticket = (Ticket) td;
+
+	            if (!ticket.isEndorsed()) {
+	                Vehicle v = this.getVehicleById(UUID.fromString(vID));
+
+	                ticket.setEndorsed(true);
+	                logger.info("Biglietto vidimato!");
+
+	                v.setTicketsValidated(v.getTicketsValidated() + 1);
+	            } else {
+	                logger.info("Aaaaaaaah facciamo una bella multina qui!");
+	            }
+	        } else {
+	            logger.info("Niente biglietto o abbonamento? Aaaaaaaah facciamo una bella multina qui!");
+	        }
+
+	        transaction.commit();
+	    } catch (Exception e) {
+	        if (transaction != null) {
+	            transaction.rollback();
+	        }
+	        logger.error("An error occurred during ticket validation: " + e.getMessage());
+	    }
+	}
+
+	
 	public Vehicle getVehicleById(UUID id) {
 		Vehicle found = em.find(Vehicle.class, id);
 		return found;
@@ -175,5 +221,6 @@ public class VehicleDAO {
 			throw e;
 		}
 	}
+
 
 }

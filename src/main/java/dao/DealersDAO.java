@@ -3,23 +3,39 @@ package dao;
 import java.util.List;
 
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
-import javax.persistence.Persistence;
 import javax.persistence.TypedQuery;
 
+import org.slf4j.LoggerFactory;
+
+import ch.qos.logback.classic.Logger;
 import entities.AuthorizedDealer;
 import entities.VendingMachine;
 
 public class DealersDAO {
-    private EntityManagerFactory emf;
+    private static Logger logger = (Logger) LoggerFactory.getLogger(DealersDAO.class);
 
-    public DealersDAO() {
-        emf = Persistence.createEntityManagerFactory("transportdb");
+    private final EntityManager em;
+
+    public DealersDAO(EntityManager em) {
+        this.em = em;
     }
 
-    public void createAuthorizedDealer(AuthorizedDealer authorizedDealer) {
-        EntityManager em = emf.createEntityManager();
+    public List<AuthorizedDealer> getAllAuthorizedDealers() {
+        try {
+            TypedQuery<AuthorizedDealer> query = em.createNamedQuery("AuthorizedDealer.findAll", AuthorizedDealer.class);
+            List<AuthorizedDealer> authorizedDealers = query.getResultList();
+            for (AuthorizedDealer dealer : authorizedDealers) {
+                logger.info(dealer.toString());
+            }
+            return authorizedDealers;
+        } catch (Exception e) {
+            logger.error("Error: " + e);
+            throw e;
+        }
+    }
+
+    public void saveAuthorizedDealer(AuthorizedDealer authorizedDealer) {
         EntityTransaction et = em.getTransaction();
         try {
             et.begin();
@@ -27,33 +43,15 @@ public class DealersDAO {
             et.commit();
         } catch (Exception e) {
             et.rollback();
-            e.printStackTrace();
-        } finally {
-            em.close();
+            logger.error("Error: " + e);
         }
     }
-
+    
     public AuthorizedDealer getAuthorizedDealerById(Integer id) {
-        EntityManager em = emf.createEntityManager();
-        try {
-            return em.find(AuthorizedDealer.class, id);
-        } finally {
-            em.close();
-        }
-    }
-
-    public List<AuthorizedDealer> getAllAuthorizedDealers() {
-        EntityManager em = emf.createEntityManager();
-        try {
-            TypedQuery<AuthorizedDealer> query = em.createNamedQuery("AuthorizedDealer.findAll", AuthorizedDealer.class);
-            return query.getResultList();
-        } finally {
-            em.close();
-        }
+        return em.find(AuthorizedDealer.class, id);
     }
 
     public void updateAuthorizedDealer(AuthorizedDealer authorizedDealer) {
-        EntityManager em = emf.createEntityManager();
         EntityTransaction et = em.getTransaction();
         try {
             et.begin();
@@ -61,14 +59,11 @@ public class DealersDAO {
             et.commit();
         } catch (Exception e) {
             et.rollback();
-            e.printStackTrace();
-        } finally {
-            em.close();
+            logger.error("Error: " + e);
         }
     }
 
     public void deleteAuthorizedDealer(AuthorizedDealer authorizedDealer) {
-        EntityManager em = emf.createEntityManager();
         EntityTransaction et = em.getTransaction();
         try {
             et.begin();
@@ -76,23 +71,25 @@ public class DealersDAO {
             et.commit();
         } catch (Exception e) {
             et.rollback();
-            e.printStackTrace();
-        } finally {
-            em.close();
+            logger.error("Error: " + e);
         }
     }
 
     public List<VendingMachine> getAllVendingMachines() {
-        EntityManager em = emf.createEntityManager();
         try {
             TypedQuery<VendingMachine> query = em.createNamedQuery("VendingMachine.findAll", VendingMachine.class);
-            return query.getResultList();
-        } finally {
-            em.close();
+            List<VendingMachine> vendingMachines = query.getResultList();
+            for (VendingMachine machine : vendingMachines) {
+                logger.info(machine.toString());
+            }
+            return vendingMachines;
+        } catch (Exception e) {
+            logger.error("Error: " + e);
+            throw e;
         }
     }
 
     public void close() {
-        emf.close();
+        em.close();
     }
 }
