@@ -23,13 +23,13 @@ public class Main {
 		UserDAO userDao = new UserDAO(em);
 		CardDAO cardDAO = new CardDAO(em);
 		Travel_DocumentDAO travelDAO = new Travel_DocumentDAO(em);
-		DealersDAO dealersDAO = new DealersDAO();
+		DealersDAO dealersDAO = new DealersDAO(em);
 
 		// Creazione degli oggetti User
 		User user1 = new User("John", "Doe");
 		userDao.saveUser(user1);
 		AuthorizedDealer dealer1 = new AuthorizedDealer();
-		dealersDAO.createAuthorizedDealer(dealer1);
+		dealersDAO.saveAuthorizedDealer(dealer1);
 
 		Card card1 = new Card(LocalDate.of(2023, 3 , 10));
 		card1.setUser(user1);
