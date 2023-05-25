@@ -6,7 +6,10 @@ import java.util.UUID;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 
+import java.time.Duration;
 import dao.DealersDAO;
+import dao.RouteDAO;
+import dao.TravelDAO;
 import dao.Travel_DocumentDAO;
 import dao.CardDAO;
 import dao.UserDAO;
@@ -15,7 +18,9 @@ import entities.AuthorizedDealer;
 import entities.Bus;
 import entities.Card;
 import entities.Public_Transport_Pass;
+import entities.Route;
 import entities.Ticket;
+import entities.Travel;
 import entities.User;
 import util.JpaUtil;
 
@@ -29,6 +34,8 @@ public class Main {
 		Travel_DocumentDAO travelDAO = new Travel_DocumentDAO(em);
 		DealersDAO dealersDAO = new DealersDAO(em);
 		VehicleDAO vDAO = new VehicleDAO(em);		
+		RouteDAO rDAO = new RouteDAO(em);
+		TravelDAO tDAO = new TravelDAO(em);
 		
 		// Creazione degli oggetti User
 		
@@ -54,9 +61,27 @@ public class Main {
 		travelDAO.save(t2);
 		travelDAO.save(t3);
 		
+		Route r1 = new Route("Roma", "Milano", 8);
+		rDAO.saveRoute(r1);
+		
 
 		Bus b1 = new Bus(10);
 		vDAO.saveVehicle(b1);
+		Bus b2 = new Bus(100);
+		vDAO.saveVehicle(b2);
+		Duration time = Duration.ofHours(12);
+		Duration time2 = Duration.ofHours(24);
+		
+		Travel travel1 = new Travel(b1, r1);
+		travel1.setTravelTime(time);
+		travel1.setNumberOfTimes(3);
+		tDAO.saveTravel(travel1);
+		
+		Travel travel2 = new Travel(b2, r1);
+		travel2.setTravelTime(time2);
+		travel2.setNumberOfTimes(1);
+		tDAO.saveTravel(travel2);
+		
 		
 		t1.setVehicle(b1);
 		t2.setVehicle(b1);
@@ -66,8 +91,11 @@ public class Main {
 		vDAO.validateTicket(t2.getId().toString(), b1.getId().toString());
 		vDAO.validateTicket(t3.getId().toString(), b1.getId().toString());
 		vDAO.saveVehicle(b1);
+		
+		
+		
 		//vDAO.docPerVehicleAndDate(vDAO.getVehicleById(UUID.fromString("e4ea7b87-b7df-4376-81a5-d8a95dca1704")), LocalDate.now().minusDays(1), LocalDate.now().plusDays(1));
-		travelDAO.checkValidity(pass1.getId().toString(), null);
+		//travelDAO.checkValidity(pass1.getId().toString(), null);
 		
 		em.close();
 		emf.close();
