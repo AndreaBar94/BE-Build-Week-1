@@ -66,7 +66,7 @@ public class Main {
 //		vDAO.validateTicket(t2.getId().toString(), b1.getId().toString());
 //		vDAO.validateTicket(t3.getId().toString(), b1.getId().toString());
 //		vDAO.saveVehicle(b1);
-		vDAO.docPerVehicleAndDate(vDAO.getVehicleById(UUID.fromString("e4ea7b87-b7df-4376-81a5-d8a95dca1704")), LocalDate.now().minusDays(1), LocalDate.now().plusDays(1));
+		//vDAO.docPerVehicleAndDate(vDAO.getVehicleById(UUID.fromString("e4ea7b87-b7df-4376-81a5-d8a95dca1704")), LocalDate.now().minusDays(1), LocalDate.now().plusDays(1));
 		
 		
 		em.close();
