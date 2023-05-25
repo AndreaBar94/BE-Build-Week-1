@@ -1,9 +1,7 @@
 package entities;
 
 import java.time.LocalDate;
-import java.util.UUID;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -25,6 +23,10 @@ public class Ticket extends Travel_Document{
 	@JoinColumn(name = "user_id")
 	private User user;
 	
+	@ManyToOne
+	@JoinColumn(name = "vehicle_id")
+	private Vehicle vehicle;
+
 	private LocalDate dataVid;
 	private boolean endorsed;
 	
