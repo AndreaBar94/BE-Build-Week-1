@@ -14,7 +14,7 @@ import lombok.Setter;
 
 @Entity
 @Table(name = "pass")
- @Getter
+@Getter
 @Setter
 @NoArgsConstructor
 public class Public_Transport_Pass extends Travel_Document {
@@ -36,5 +36,8 @@ public class Public_Transport_Pass extends Travel_Document {
 		this.card = card;
 	}
 	
-	
+	public Card getCard() {
+		return card;
+	}
+
 }

@@ -13,6 +13,7 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 import entities.AuthorizedDealer;
+import entities.Card;
 import entities.Public_Transport_Pass;
 import entities.Ticket;
 import entities.Travel_Document;
@@ -63,10 +64,11 @@ public class Travel_DocumentDAO {
 		
 	}
 	
-	public void checkValidity(String id) {
-	    Public_Transport_Pass pass = em.find(Public_Transport_Pass.class, UUID.fromString(id));
-	    
-	    if (pass.getSubType() == Public_Transport_Pass.SubType.SETTIMANALE) {
+	public void checkValidity(String idPass, String idCard) {
+	    Public_Transport_Pass pass = em.find(Public_Transport_Pass.class, UUID.fromString(idPass));
+	    Card card = em.find(Card.class, UUID.fromString(idCard));
+	    		
+	    if (pass.getSubType() == Public_Transport_Pass.SubType.SETTIMANALE && card.isValidità() == true) {
 	       
 	        LocalDate dataEmissione = pass.getDataEmissione();
 	        LocalDate now = LocalDate.now();
@@ -75,9 +77,10 @@ public class Travel_DocumentDAO {
 	        if (now.isBefore(expirationDate)) {
 	            System.out.println("L'abbonamento settimanale è ancora valido.");
 	        } else {
+	        	pass.setValid(false);
 	            System.out.println("L'abbonamento settimanale non è più valido.");
 	        }
-	    } else if (pass.getSubType() == Public_Transport_Pass.SubType.MENSILE) {
+	    } else if (pass.getSubType() == Public_Transport_Pass.SubType.MENSILE && card.isValidità() == true) {
 	    
 	        LocalDate dataEmissione = pass.getDataEmissione();
 	        LocalDate now = LocalDate.now();
@@ -86,10 +89,11 @@ public class Travel_DocumentDAO {
 	        if (now.isBefore(expirationDate)) {
 	            System.out.println("L'abbonamento mensile è ancora valido.");
 	        } else {
+	        	pass.setValid(false);
 	            System.out.println("L'abbonamento mensile non è più valido.");
 	        }
 	    } else {
-	        System.out.println("Tipo di abbonamento non supportato.");
+	        System.out.println("Card dell'utente scaduta.");
 	    }
 	}
 	

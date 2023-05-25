@@ -15,6 +15,7 @@ import org.slf4j.LoggerFactory;
 
 import entities.AuthorizedDealer;
 import entities.Bus;
+import entities.Card;
 import entities.Public_Transport_Pass;
 import entities.Ticket;
 import entities.Tram;
@@ -45,6 +46,39 @@ public class VehicleDAO {
 			throw e;
 		}
 	}
+//	
+//	public void checkValidity(String idPass, String idCard) {
+//	    Public_Transport_Pass pass = em.find(Public_Transport_Pass.class, UUID.fromString(idPass));
+//	    Card card = em.find(Card.class, UUID.fromString(idCard));
+//	    		
+//	    if (pass.getSubType() == Public_Transport_Pass.SubType.SETTIMANALE && card.isValidità() == true) {
+//	       
+//	        LocalDate dataEmissione = pass.getDataEmissione();
+//	        LocalDate now = LocalDate.now();
+//	        LocalDate expirationDate = dataEmissione.plusWeeks(1);
+//	        
+//	        if (now.isBefore(expirationDate)) {
+//	            System.out.println("L'abbonamento settimanale è ancora valido.");
+//	        } else {
+//	        	pass.setValid(false);
+//	            System.out.println("L'abbonamento settimanale non è più valido.");
+//	        }
+//	    } else if (pass.getSubType() == Public_Transport_Pass.SubType.MENSILE && card.isValidità() == true) {
+//	    
+//	        LocalDate dataEmissione = pass.getDataEmissione();
+//	        LocalDate now = LocalDate.now();
+//	        LocalDate expirationDate = dataEmissione.plusMonths(1); 
+//	        
+//	        if (now.isBefore(expirationDate)) {
+//	            System.out.println("L'abbonamento mensile è ancora valido.");
+//	        } else {
+//	        	pass.setValid(false);
+//	            System.out.println("L'abbonamento mensile non è più valido.");
+//	        }
+//	    } else {
+//	        System.out.println("Card dell'utente scaduta.");
+//	    }
+//	}
 	
 	public void validateTicket(String travelDocID, String vID) {
 	    EntityTransaction transaction = null;
@@ -55,7 +89,7 @@ public class VehicleDAO {
 
 	        Travel_DocumentDAO tDAO = new Travel_DocumentDAO(em);
 	        Travel_Document td = tDAO.findByUUID(travelDocID);
-
+	       
 	        if (td instanceof Public_Transport_Pass) {
 	            if (((Public_Transport_Pass) td).isValid()) {
 	                logger.info("Pass valido!");
