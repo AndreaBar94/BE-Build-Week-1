@@ -24,6 +24,7 @@ public class Ticket extends Travel_Document{
 	@ManyToOne
 	@JoinColumn(name = "user_id")
 	private User user;
+	
 	private LocalDate dataVid;
 	private boolean endorsed;
 	

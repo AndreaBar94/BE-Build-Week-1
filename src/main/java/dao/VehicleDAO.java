@@ -225,11 +225,11 @@ public class VehicleDAO {
 		}
 	}
 	
-	public int docPerVehicleAndDate(Vehicle vehicle, LocalDate startDate, LocalDate endDate) {
+	public long docPerVehicleAndDate(Vehicle vehicle, LocalDate startDate, LocalDate endDate) {
 		try {
-            Set<Ticket> documents = getDocumentsByVehicle(vehicle);
-            int count = (int) documents.stream()
-                    .filter(document -> isWithinDateRange(document.getDataVid(), startDate, endDate))
+			List<Ticket> tickets = getDocumentsByVehicle(vehicle);//fin qui tutto ok
+            int count =(int) tickets.stream()
+                    .filter(ticket -> isWithinDateRange(ticket.getDataVid(), startDate, endDate))
                     .count();
             logger.info("Numero di documenti vidimati per il mezzo selezionato nell'arco di tempo richiesto: " + count);
             return count;
@@ -239,9 +239,30 @@ public class VehicleDAO {
         }
 	}
 	
-	private Set<Ticket> getDocumentsByVehicle(Vehicle vehicle) {
+//	public int docPerVehicleAndDate(Vehicle vehicle, LocalDate startDate, LocalDate endDate) {
+//	    try {
+//	        List<Ticket> tickets = em.createQuery(
+//	                "SELECT t FROM Ticket t WHERE t.vehicle = :vehicle " +
+//	                "AND t.endorsed = true " +
+//	                "AND t.dataVid >= :startDate " +
+//	                "AND t.dataVid <= :endDate", Ticket.class)
+//	                .setParameter("vehicle", vehicle)
+//	                .setParameter("startDate", startDate)
+//	                .setParameter("endDate", endDate)
+//	                .getResultList();
+//
+//	        int count = tickets.size();
+//	        logger.info("Numero di documenti vidimati per il mezzo selezionato nell'arco di tempo richiesto: " + count);
+//	        return count;
+//	    } catch (Exception e) {
+//	        logger.error("Si è verificato un errore durante il conteggio dei biglietti.", e);
+//	        return 0;
+//	    }
+//	}
+	
+	private List<Ticket> getDocumentsByVehicle(Vehicle vehicle) {
         try {
-			Set<Ticket> found = vehicle.getTicketsList();
+        	List<Ticket> found = vehicle.getTicketsList();
 			return found;
 		} catch (Exception e) {
 			 logger.error("Si è verificato un errore durante il conteggio dei documenti.", e);
@@ -250,7 +271,6 @@ public class VehicleDAO {
   
     }
     
-
     private boolean isWithinDateRange(LocalDate date, LocalDate startDate, LocalDate endDate) {
         return !date.isBefore(startDate) && !date.isAfter(endDate);
     }
