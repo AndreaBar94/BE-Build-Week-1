@@ -8,6 +8,10 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
+
+import java.util.ArrayList;
+import java.util.List;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -27,7 +31,9 @@ public class AuthorizedDealer {
 	@Column(name = "issued_documents")
 	private int totalDocumentsIssued = 0;
 	
-
+	@OneToMany(mappedBy = "puntoEmissione")
+    private List<Travel_Document> issuedDocuments = new ArrayList<>();
+    
 	public int incrementDocCounter() {
 		return totalDocumentsIssued++;
 	}

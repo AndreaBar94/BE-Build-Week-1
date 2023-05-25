@@ -1,6 +1,7 @@
 package dao;
 
 import java.util.List;
+import java.util.UUID;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
@@ -47,8 +48,8 @@ public class DealersDAO {
         }
     }
     
-    public AuthorizedDealer getAuthorizedDealerById(Integer id) {
-        return em.find(AuthorizedDealer.class, id);
+    public AuthorizedDealer getAuthorizedDealerById(String id) {
+        return em.find(AuthorizedDealer.class, UUID.fromString(id));
     }
 
     public void updateAuthorizedDealer(AuthorizedDealer authorizedDealer) {

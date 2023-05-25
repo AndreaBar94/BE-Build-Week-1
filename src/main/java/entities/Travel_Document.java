@@ -41,6 +41,7 @@ public abstract class Travel_Document {
 		this.puntoEmissione = puntoEmissione;
 		 if (puntoEmissione != null) {
 	            this.puntoEmissione.incrementDocCounter();
+	            this.puntoEmissione.getIssuedDocuments().add(this); 
 	        }
 	}
 
