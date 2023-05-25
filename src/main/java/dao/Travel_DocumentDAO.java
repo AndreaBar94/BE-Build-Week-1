@@ -14,7 +14,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 import entities.AuthorizedDealer;
 import entities.Public_Transport_Pass;
+import entities.Ticket;
 import entities.Travel_Document;
+import entities.Vehicle;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -104,6 +106,8 @@ public class Travel_DocumentDAO {
             return 0;
         }
 	}
+	
+
 	
 	private List<Travel_Document> getDocumentsByAuthorizedDealer(AuthorizedDealer authorizedDealer) {
         try {

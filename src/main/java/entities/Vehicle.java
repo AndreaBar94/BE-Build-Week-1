@@ -2,7 +2,9 @@ package entities;
 
 import java.time.Duration;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
@@ -53,7 +55,7 @@ public abstract class Vehicle {
 	private Duration totalServiceDuration;
 	
 	@OneToMany(mappedBy = "vehicle", cascade = CascadeType.ALL)
-	private Set<Ticket> ticketsList = new HashSet<>();
+	private List<Ticket> ticketsList = new ArrayList<>();
 	
 	
 	public Vehicle() {
