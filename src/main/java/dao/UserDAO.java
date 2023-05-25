@@ -12,13 +12,15 @@ import org.slf4j.LoggerFactory;
 import ch.qos.logback.classic.Logger;
 import entities.Card;
 import entities.User;
+import lombok.extern.slf4j.Slf4j;
 
-public class userDao {
-	private static Logger logger = (Logger) LoggerFactory.getLogger(userDao.class);
+@Slf4j
+public class UserDAO {
+	
 	
 	private final EntityManager em;
 
-	public userDao(EntityManager em) {
+	public UserDAO(EntityManager em) {
 		this.em = em;
 	}
 	
@@ -27,11 +29,11 @@ public class userDao {
 			TypedQuery<User> query = em.createQuery("SELECT u FROM user u", User.class);
 			List<User> users = query.getResultList();
 			for(User u : users) {
-				logger.info(u.toString());
+				log.info(u.toString());
 			};
 			return users;
 		} catch (Exception e) {
-			logger.error("error: " + e);
+			log.error("error: " + e);
 			throw e;
 		}
 		
@@ -44,10 +46,10 @@ public class userDao {
 			t.begin();
 			em.persist(a);
 			t.commit();
-			logger.info("Saved user!!");
+			log.info("Saved user!!");
 			
 		} catch (Exception e) {
-			logger.error("errore: " + e);
+			log.error("errore: " + e);
 		}
 	}
 	
@@ -61,9 +63,9 @@ public class userDao {
 			User user = em.find(User.class, id);
 			em.remove(user);
 			t.commit();
-			logger.info("User delete");
+			log.info("User delete");
 		} catch (Exception e) {
-			logger.error("errore: " + e);
+			log.error("errore: " + e);
 		}
 	};
 	

@@ -14,14 +14,14 @@ import lombok.Setter;
 
 @Entity
 @Table(name = "pass")
-@Getter
+ @Getter
 @Setter
 @NoArgsConstructor
 public class Public_Transport_Pass extends Travel_Document {
 	
 	
 	public enum SubType {SETTIMANALE, MENSILE};
-	private SubType subType;
+	protected SubType subType;
 	
 	private boolean isValid;
 
