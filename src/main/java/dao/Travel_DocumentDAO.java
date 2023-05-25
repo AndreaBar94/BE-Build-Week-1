@@ -7,6 +7,11 @@ import java.util.UUID;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 
+import ch.qos.logback.classic.Level;
+
+import java.time.LocalDate;
+import java.util.List;
+import java.util.stream.Collectors;
 import entities.AuthorizedDealer;
 import entities.Public_Transport_Pass;
 import entities.Travel_Document;
@@ -85,4 +90,34 @@ public class Travel_DocumentDAO {
 	        System.out.println("Tipo di abbonamento non supportato.");
 	    }
 	}
+	
+	public int docPerDealersAndDate(AuthorizedDealer authorizedDealer, LocalDate startDate, LocalDate endDate) {
+		try {
+            List<Travel_Document> documents = getDocumentsByAuthorizedDealer(authorizedDealer);
+            int count = (int) documents.stream()
+                    .filter(document -> isWithinDateRange(document.getDataEmissione(), startDate, endDate))
+                    .count();
+            log.info("Numero di documenti emessi per il punto di emissione: " + count);
+            return count;
+        } catch (Exception e) {
+            log.error("Si è verificato un errore durante il conteggio dei documenti.", e);
+            return 0;
+        }
+	}
+	
+	private List<Travel_Document> getDocumentsByAuthorizedDealer(AuthorizedDealer authorizedDealer) {
+        try {
+			List<Travel_Document> found = authorizedDealer.getIssuedDocuments();
+			return found;
+		} catch (Exception e) {
+			 log.error("Si è verificato un errore durante il conteggio dei documenti.", e);
+	            return null;
+		}
+  
+    }
+    
+
+    private boolean isWithinDateRange(LocalDate date, LocalDate startDate, LocalDate endDate) {
+        return !date.isBefore(startDate) && !date.isAfter(endDate);
+    }
 }
