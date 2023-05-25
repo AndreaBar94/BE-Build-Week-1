@@ -7,9 +7,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import entities.Route;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public class RouteDAO {
-	private static final Logger logger = LoggerFactory.getLogger(VehicleDAO.class);
 	private final EntityManager em;
 
 	public RouteDAO(EntityManager em) {
@@ -22,12 +23,12 @@ public class RouteDAO {
 			transaction.begin();
 			em.persist(route);
 			transaction.commit();
-			logger.info("Route salvato correttamente: " + route);
+			log.info("Route salvato correttamente: " + route);
 		} catch (Exception e) {
 			if (transaction.isActive()) {
 				transaction.rollback();
 			}
-			logger.error("Errore durante il salvataggio della Route.", e);
+			log.error("Errore durante il salvataggio della Route.", e);
 			throw e;
 		}
 	}

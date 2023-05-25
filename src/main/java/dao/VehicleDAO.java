@@ -22,9 +22,10 @@ import entities.Tram;
 import entities.Travel_Document;
 import entities.Vehicle;
 import entities.Vehicle.State;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public class VehicleDAO {
-	private static final Logger logger = LoggerFactory.getLogger(VehicleDAO.class);
 	private final EntityManager em;
 
 	public VehicleDAO(EntityManager em) {
@@ -37,12 +38,12 @@ public class VehicleDAO {
 			transaction.begin();
 			em.persist(vehicle);
 			transaction.commit();
-			logger.info("Veicolo salvato correttamente: " + vehicle);
+			log.info("Veicolo salvato correttamente: " + vehicle);
 		} catch (Exception e) {
 			if (transaction.isActive()) {
 				transaction.rollback();
 			}
-			logger.error("Errore durante il salvataggio del veicolo.", e);
+			log.error("Errore durante il salvataggio del veicolo.", e);
 			throw e;
 		}
 	}
@@ -92,9 +93,9 @@ public class VehicleDAO {
 	       
 	        if (td instanceof Public_Transport_Pass) {
 	            if (((Public_Transport_Pass) td).isValid()) {
-	                logger.info("Pass valido!");
+	                log.info("Pass valido!");
 	            } else {
-	                logger.info("Aaaaaaaah facciamo una bella multina qui!");
+	                log.info("Aaaaaaaah facciamo una bella multina qui!");
 	            }
 	        } else if (td instanceof Ticket) {
 	            Ticket ticket = (Ticket) td;
@@ -104,14 +105,14 @@ public class VehicleDAO {
 
 	                ticket.setEndorsed(true);
 	                ticket.setDataVid(LocalDate.now());
-	                logger.info("Biglietto vidimato!");
+	                log.info("Biglietto vidimato!");
 
 	                v.setTicketsValidated(v.getTicketsValidated() + 1);
 	            } else {
-	                logger.info("Aaaaaaaah facciamo una bella multina qui!");
+	                log.info("Aaaaaaaah facciamo una bella multina qui!");
 	            }
 	        } else {
-	            logger.info("Niente biglietto o abbonamento? Aaaaaaaah facciamo una bella multina qui!");
+	            log.info("Niente biglietto o abbonamento? Aaaaaaaah facciamo una bella multina qui!");
 	        }
 
 	        transaction.commit();
@@ -119,7 +120,7 @@ public class VehicleDAO {
 	        if (transaction != null) {
 	            transaction.rollback();
 	        }
-	        logger.error("An error occurred during ticket validation: " + e.getMessage());
+	        log.error("An error occurred during ticket validation: " + e.getMessage());
 	    }
 	}
 
@@ -134,11 +135,11 @@ public class VehicleDAO {
 			TypedQuery<Vehicle> query = em.createQuery("SELECT v FROM Vehicle v", Vehicle.class);
 			List<Vehicle> vehicles = query.getResultList();
 			for (Vehicle vehicle : vehicles) {
-				logger.info(vehicle.toString());
+				log.info(vehicle.toString());
 			}
 			return vehicles;
 		} catch (Exception e) {
-			logger.error("Errore durante il recupero dei veicoli.", e);
+			log.error("Errore durante il recupero dei veicoli.", e);
 			throw e;
 		}
 	}
@@ -148,11 +149,11 @@ public class VehicleDAO {
 			TypedQuery<Bus> query = em.createQuery("SELECT b FROM Bus b", Bus.class);
 			List<Bus> buses = query.getResultList();
 			for (Bus bus : buses) {
-				logger.info(bus.toString());
+				log.info(bus.toString());
 			}
 			return buses;
 		} catch (Exception e) {
-			logger.error("Errore durante il recupero dei buses.", e);
+			log.error("Errore durante il recupero dei buses.", e);
 			throw e;
 		}
 	}
@@ -162,11 +163,11 @@ public class VehicleDAO {
 			TypedQuery<Tram> query = em.createQuery("SELECT t FROM Tram t", Tram.class);
 			List<Tram> trams = query.getResultList();
 			for (Tram tram : trams) {
-				logger.info(tram.toString());
+				log.info(tram.toString());
 			}
 			return trams;
 		} catch (Exception e) {
-			logger.error("Errore durante il recupero dei trams.", e);
+			log.error("Errore durante il recupero dei trams.", e);
 			throw e;
 		}
 	}
@@ -179,15 +180,15 @@ public class VehicleDAO {
 			if (vehicle != null) {
 				em.remove(vehicle);
 				transaction.commit();
-				logger.info("Veicolo eliminato correttamente: " + vehicle);
+				log.info("Veicolo eliminato correttamente: " + vehicle);
 			} else {
-				logger.warn("Impossibile trovare il veicolo con ID: " + id);
+				log.warn("Impossibile trovare il veicolo con ID: " + id);
 			}
 		} catch (Exception e) {
 			if (transaction.isActive()) {
 				transaction.rollback();
 			}
-			logger.error("Errore durante l'eliminazione del veicolo.", e);
+			log.error("Errore durante l'eliminazione del veicolo.", e);
 			throw e;
 		}
 	}
@@ -208,19 +209,19 @@ public class VehicleDAO {
 					vehicle.setTotalServiceDuration(vehicle.getTotalServiceDuration().plus(serviceDuration));
 					vehicle.setServiceCount(vehicle.getServiceCount() + 1);
 				} else {
-					logger.info("Vehicle with ID " + id + " is not in service.");
+					log.info("Vehicle with ID " + id + " is not in service.");
 				}
 			} else {
-				logger.info("No vehicle found with ID " + id);
+				log.info("No vehicle found with ID " + id);
 			}
 
 			transaction.commit();
-			logger.info("Service ended successfully for vehicle with ID: " + id);
+			log.info("Service ended successfully for vehicle with ID: " + id);
 		} catch (Exception e) {
 			if (transaction.isActive()) {
 				transaction.rollback();
 			}
-			logger.error("Error occurred while ending service for vehicle with ID: " + id, e);
+			log.error("Error occurred while ending service for vehicle with ID: " + id, e);
 			throw e;
 		}
 	}
@@ -242,19 +243,19 @@ public class VehicleDAO {
 							vehicle.getTotalMaintenanceDuration().plus(maintenanceDuration));
 					vehicle.setMaintenanceCount(vehicle.getMaintenanceCount() + 1);
 				} else {
-					logger.info("Vehicle with ID " + id + " is not under maintenance.");
+					log.info("Vehicle with ID " + id + " is not under maintenance.");
 				}
 			} else {
-				logger.info("No vehicle found with ID " + id);
+				log.info("No vehicle found with ID " + id);
 			}
 
 			transaction.commit();
-			logger.info("Maintenance ended successfully for vehicle with ID: " + id);
+			log.info("Maintenance ended successfully for vehicle with ID: " + id);
 		} catch (Exception e) {
 			if (transaction.isActive()) {
 				transaction.rollback();
 			}
-			logger.error("Error occurred while ending maintenance for vehicle with ID: " + id, e);
+			log.error("Error occurred while ending maintenance for vehicle with ID: " + id, e);
 			throw e;
 		}
 	}
@@ -265,10 +266,10 @@ public class VehicleDAO {
             int count =(int) tickets.stream()
                     .filter(ticket -> isWithinDateRange(ticket.getDataVid(), startDate, endDate))
                     .count();
-            logger.info("Numero di documenti vidimati per il mezzo selezionato nell'arco di tempo richiesto: " + count);
+            log.info("Numero di documenti vidimati per il mezzo selezionato nell'arco di tempo richiesto: " + count);
             return count;
         } catch (Exception e) {
-            logger.error("Si è verificato un errore durante il conteggio dei biglietti.", e);
+            log.error("Si è verificato un errore durante il conteggio dei biglietti.", e);
             return 0;
         }
 	}
@@ -279,7 +280,7 @@ public class VehicleDAO {
         	List<Ticket> found = vehicle.getTicketsList();
 			return found;
 		} catch (Exception e) {
-			 logger.error("Si è verificato un errore durante il conteggio dei documenti.", e);
+			 log.error("Si è verificato un errore durante il conteggio dei documenti.", e);
 	            return null;
 		}
   
