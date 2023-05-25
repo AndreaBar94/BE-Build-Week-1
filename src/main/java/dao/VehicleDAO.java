@@ -3,6 +3,7 @@ package dao;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 import javax.persistence.EntityManager;
@@ -12,6 +13,7 @@ import javax.persistence.TypedQuery;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import entities.AuthorizedDealer;
 import entities.Bus;
 import entities.Public_Transport_Pass;
 import entities.Ticket;
@@ -67,6 +69,7 @@ public class VehicleDAO {
 	                Vehicle v = this.getVehicleById(UUID.fromString(vID));
 
 	                ticket.setEndorsed(true);
+	                ticket.setDataVid(LocalDate.now());
 	                logger.info("Biglietto vidimato!");
 
 	                v.setTicketsValidated(v.getTicketsValidated() + 1);
@@ -221,6 +224,35 @@ public class VehicleDAO {
 			throw e;
 		}
 	}
+	
+	public int docPerVehicleAndDate(Vehicle vehicle, LocalDate startDate, LocalDate endDate) {
+		try {
+            Set<Ticket> documents = getDocumentsByVehicle(vehicle);
+            int count = (int) documents.stream()
+                    .filter(document -> isWithinDateRange(document.getDataVid(), startDate, endDate))
+                    .count();
+            logger.info("Numero di documenti vidimati per il mezzo selezionato nell'arco di tempo richiesto: " + count);
+            return count;
+        } catch (Exception e) {
+            logger.error("Si è verificato un errore durante il conteggio dei biglietti.", e);
+            return 0;
+        }
+	}
+	
+	private Set<Ticket> getDocumentsByVehicle(Vehicle vehicle) {
+        try {
+			Set<Ticket> found = vehicle.getTicketsList();
+			return found;
+		} catch (Exception e) {
+			 logger.error("Si è verificato un errore durante il conteggio dei documenti.", e);
+	            return null;
+		}
+  
+    }
+    
 
+    private boolean isWithinDateRange(LocalDate date, LocalDate startDate, LocalDate endDate) {
+        return !date.isBefore(startDate) && !date.isAfter(endDate);
+    }
 
 }
