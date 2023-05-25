@@ -11,13 +11,14 @@ import org.slf4j.LoggerFactory;
 
 import ch.qos.logback.classic.Logger;
 import entities.Card;
+import lombok.extern.slf4j.Slf4j;
 
-public class cardDao {
-	private static Logger logger = (Logger) LoggerFactory.getLogger(cardDao.class);
+@Slf4j
+public class CardDAO {
 	
 	private final EntityManager em;
 
-	public cardDao(EntityManager em) {
+	public CardDAO(EntityManager em) {
 		this.em = em;
 	}
 	
@@ -26,11 +27,11 @@ public class cardDao {
 			TypedQuery<Card> query = em.createQuery("SELECT c FROM card c", Card.class);
 			List<Card> cards = query.getResultList();
 			for(Card c : cards) {
-				logger.info(c.toString());
+				log.info(c.toString());
 			};
 			return cards;
 		} catch (Exception e) {
-			logger.error("error: " + e);
+			log.error("error: " + e);
 			throw e;
 		}
 		
@@ -42,10 +43,10 @@ public class cardDao {
 			t.begin();
 			em.persist(a);
 			t.commit();
-			logger.info("Card saved!!");
+			log.info("Card saved!!");
 			
 		} catch (Exception e) {
-			logger.error("error: " + e);
+			log.error("error: " + e);
 		}
 	}
 	
@@ -57,9 +58,9 @@ public class cardDao {
 			Card card = em.find(Card.class, id);
 			em.remove(card);
 			t.commit();
-			logger.info("Removed Card");
+			log.info("Removed Card");
 		} catch (Exception e) {
-			logger.error("error: " + e);
+			log.error("error: " + e);
 		}
 	};
 	

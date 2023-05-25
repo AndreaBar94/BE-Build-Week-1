@@ -10,15 +10,18 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import entities.Public_Transport_Pass.SubType;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 
 @Entity
 @Table(name = "card")
 @Getter
 @Setter
 @NoArgsConstructor
+@Slf4j
 public class Card {
 	@Id
 	@GeneratedValue
@@ -26,7 +29,8 @@ public class Card {
 	protected LocalDate dataAttivazione;
 	protected LocalDate dataScadenza;
 	protected boolean validità;
-
+	protected double credit;
+	
 	@OneToOne
 	@JoinColumn(name = "user_id")
 	private User user;
@@ -38,7 +42,33 @@ public class Card {
 	public Card(LocalDate dataAttivazione) {
 		this.dataAttivazione = dataAttivazione;
 		this.dataScadenza = dataAttivazione.plusYears(1);
-		this.validità = true;
+		this.validità = false;
+		this.credit = 0.00;
+	};
+	
+	public void toUpCredit(double credito) {
+			
+			if(validità == false) {
+				
+				this.credit =+ credito;
+				
+				if(credit>= 200){
+					
+					this.dataAttivazione = LocalDate.now();
+					this.dataScadenza = dataAttivazione.plusYears(1);
+					this.credit = credit - 200;
+					this.validità = true;
+					log.info("You have purchased the annual pass for 200$" + " / you have a credit of: " + credit);
+					
+				}else {
+					
+					log.warn("you don't have enough credit.");
+					
+				}
+				
+			}else{
+				log.info("The card is still valid");
+			};	
 	};
 
 	@Override
