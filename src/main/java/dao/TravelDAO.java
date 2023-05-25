@@ -10,9 +10,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import entities.Travel;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public class TravelDAO {
-    private static final Logger logger = LoggerFactory.getLogger(TravelDAO.class);
     private final EntityManager em;
 
     public TravelDAO(EntityManager em) {
@@ -25,12 +26,12 @@ public class TravelDAO {
             transaction.begin();
             em.persist(travel);
             transaction.commit();
-            logger.info("Viaggio salvato correttamente: " + travel);
+            log.info("Viaggio salvato correttamente: " + travel);
         } catch (Exception e) {
             if (transaction.isActive()) {
                 transaction.rollback();
             }
-            logger.error("Errore durante il salvataggio del viaggio.", e);
+            log.error("Errore durante il salvataggio del viaggio.", e);
             throw e;
         }
     }
@@ -48,15 +49,15 @@ public class TravelDAO {
             if (travel != null) {
                 em.remove(travel);
                 transaction.commit();
-                logger.info("Viaggio eliminato correttamente: " + travel);
+                log.info("Viaggio eliminato correttamente: " + travel);
             } else {
-                logger.warn("Impossibile trovare il viaggio con ID: " + id);
+                log.warn("Impossibile trovare il viaggio con ID: " + id);
             }
         } catch (Exception e) {
             if (transaction.isActive()) {
                 transaction.rollback();
             }
-            logger.error("Errore durante l'eliminazione del viaggio.", e);
+            log.error("Errore durante l'eliminazione del viaggio.", e);
             throw e;
         }
     }
@@ -66,11 +67,11 @@ public class TravelDAO {
             TypedQuery<Travel> query = em.createQuery("SELECT t FROM Travel t", Travel.class);
             List<Travel> travels = query.getResultList();
             for (Travel travel : travels) {
-                logger.info(travel.toString());
+                log.info(travel.toString());
             }
             return travels;
         } catch (Exception e) {
-            logger.error("Errore durante il recupero dei viaggi.", e);
+            log.error("Errore durante il recupero dei viaggi.", e);
             throw e;
         }
     }

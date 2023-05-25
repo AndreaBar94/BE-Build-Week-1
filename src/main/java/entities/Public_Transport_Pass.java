@@ -4,6 +4,8 @@ import java.time.LocalDate;
 import java.util.UUID;
 
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
@@ -21,6 +23,9 @@ public class Public_Transport_Pass extends Travel_Document {
 	
 	
 	public enum SubType {SETTIMANALE, MENSILE};
+	
+	
+	@Enumerated(EnumType.STRING)
 	protected SubType subType;
 	
 	private boolean isValid;

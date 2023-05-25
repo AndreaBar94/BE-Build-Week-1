@@ -12,9 +12,10 @@ import org.slf4j.LoggerFactory;
 import ch.qos.logback.classic.Logger;
 import entities.AuthorizedDealer;
 import entities.VendingMachine;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public class DealersDAO {
-    private static Logger logger = (Logger) LoggerFactory.getLogger(DealersDAO.class);
 
     private final EntityManager em;
 
@@ -27,11 +28,11 @@ public class DealersDAO {
             TypedQuery<AuthorizedDealer> query = em.createNamedQuery("AuthorizedDealer.findAll", AuthorizedDealer.class);
             List<AuthorizedDealer> authorizedDealers = query.getResultList();
             for (AuthorizedDealer dealer : authorizedDealers) {
-                logger.info(dealer.toString());
+                log.info(dealer.toString());
             }
             return authorizedDealers;
         } catch (Exception e) {
-            logger.error("Error: " + e);
+            log.error("Error: " + e);
             throw e;
         }
     }
@@ -44,7 +45,7 @@ public class DealersDAO {
             et.commit();
         } catch (Exception e) {
             et.rollback();
-            logger.error("Error: " + e);
+            log.error("Error: " + e);
         }
     }
     
@@ -60,7 +61,7 @@ public class DealersDAO {
             et.commit();
         } catch (Exception e) {
             et.rollback();
-            logger.error("Error: " + e);
+            log.error("Error: " + e);
         }
     }
 
@@ -72,7 +73,7 @@ public class DealersDAO {
             et.commit();
         } catch (Exception e) {
             et.rollback();
-            logger.error("Error: " + e);
+            log.error("Error: " + e);
         }
     }
 
@@ -81,11 +82,11 @@ public class DealersDAO {
             TypedQuery<VendingMachine> query = em.createNamedQuery("VendingMachine.findAll", VendingMachine.class);
             List<VendingMachine> vendingMachines = query.getResultList();
             for (VendingMachine machine : vendingMachines) {
-                logger.info(machine.toString());
+                log.info(machine.toString());
             }
             return vendingMachines;
         } catch (Exception e) {
-            logger.error("Error: " + e);
+            log.error("Error: " + e);
             throw e;
         }
     }
