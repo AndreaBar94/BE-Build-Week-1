@@ -6,9 +6,11 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
-import antlr.collections.List;
+import java.util.ArrayList;
+import java.util.List;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -29,8 +31,15 @@ public class Route {
 	
 	private int avgTime;
 	
-//	@OneToMany(mappedBy = "routes")
-//	private List<Travel> travels;
+	@OneToOne(mappedBy = "route")
+    private Travel travels;
+
+	public Route(String startPoint, String terminus, int avgTime) {
+		super();
+		this.startPoint = startPoint;
+		this.terminus = terminus;
+		this.avgTime = avgTime;
+	}
 	
 	
 }

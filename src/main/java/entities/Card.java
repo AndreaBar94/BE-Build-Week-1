@@ -70,7 +70,7 @@ public class Card {
 				log.info("The card is still valid");
 			};	
 	};
-
+	
 	@Override
 	public String toString() {
 		return "Tessera n°= " + Id + " data di attivazione: " + dataAttivazione + " data di scadenza: " + dataScadenza
