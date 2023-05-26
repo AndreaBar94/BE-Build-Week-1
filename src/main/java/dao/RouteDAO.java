@@ -78,60 +78,6 @@ public class RouteDAO {
 			throw e;
 		}
 	}
-	
-	public List<Map.Entry<UUID, UUID>> findVehicleIdsWithShortestTravelTime() {
-		List<Map.Entry<UUID, UUID>> vehicleIds = new ArrayList<>();
-		Map<String, List<Route>> routeMap = new HashMap<>();
-
-		try {
-			TypedQuery<Route> query = em.createQuery("SELECT r FROM Route r", Route.class);
-			List<Route> routes = query.getResultList();
-
-			// Raggruppa le route in base a startPoint e endPoint
-			for (Route route : routes) {
-				String key = route.getStartPoint() + "-" + route.getTerminus();
-				routeMap.computeIfAbsent(key, k -> new ArrayList<>()).add(route);
-			}
-
-			// Trova il percorso con il tempo di viaggio più breve per ogni coppia
-			// startPoint-endPoint
-			for (List<Route> routeGroup : routeMap.values()) {
-				if (routeGroup.size() == 1) {
-					// Solo una route per questa coppia, aggiungi direttamente il veicolo
-					// corrispondente
-					vehicleIds.add(Map.entry(routeGroup.get(0).getId(), routeGroup.get(0).getVehicle().getId()));
-				} else {
-					// Più di una route per questa coppia, cerca quella con il tempo di viaggio più
-					// breve
-					Route shortestTravelTimeRoute = null;
-					for (Route route : routeGroup) {
-						if (shortestTravelTimeRoute == null
-								|| route.getTravelTime().compareTo(shortestTravelTimeRoute.getTravelTime()) < 0) {
-							shortestTravelTimeRoute = route;
-						}
-					}
-					vehicleIds.add(
-							Map.entry(shortestTravelTimeRoute.getId(), shortestTravelTimeRoute.getVehicle().getId()));
-				}
-			}
-			for (Map.Entry<UUID, UUID> entry : vehicleIds) {
-				UUID routeId = entry.getKey();
-				UUID vehicleId = entry.getValue();
-
-				// Recupera la route corrispondente all'ID
-				Route route = em.find(Route.class, routeId);
-
-				// Stampa i dettagli utilizzando il logger
-				log.info("[" + route.getStartPoint() + " - " + route.getTerminus() + "]" + " BestVehicleId: "
-						+ vehicleId);
-			}
-		} catch (Exception e) {
-			log.error("Errore durante la ricerca dei veicoli con tempo di viaggio più breve.", e);
-			throw e;
-		}
-
-		return vehicleIds;
-	}
 
 	public List<Map.Entry<UUID, UUID>> findVehicleIdsWithShortestTravelTime() {
 		List<Map.Entry<UUID, UUID>> vehicleIds = new ArrayList<>();
