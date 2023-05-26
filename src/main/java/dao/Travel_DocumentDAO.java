@@ -39,6 +39,22 @@ public class Travel_DocumentDAO {
 		}
 
 	}
+	
+	public void update(Travel_Document travelDoc) {
+        EntityTransaction t = em.getTransaction();
+        try {
+            t.begin();
+            em.merge(travelDoc);
+            t.commit();
+            log.info("Titolo di viaggio aggiornato!");
+        } catch (Exception e) {
+            if (t.isActive()) {
+                t.rollback();
+            }
+            log.error("Errore durante l'aggiornamento del documento di viaggio.", e);
+            throw e;
+        }
+    }
 
 	public List<Travel_Document> getAllTd() {
 		try {
@@ -114,7 +130,7 @@ public class Travel_DocumentDAO {
 			List<Travel_Document> documents = getDocumentsByAuthorizedDealer(authorizedDealer);
 			int count = (int) documents.stream()
 					.filter(document -> isWithinDateRange(document.getDataEmissione(), startDate, endDate)).count();
-			log.info("Numero di documenti emessi per il punto di emissione: " + count);
+			log.info("Numero di documenti emessi per il punto di emissione: " + count + "\n");
 			return count;
 		} catch (Exception e) {
 			log.error("Si è verificato un errore durante il conteggio dei documenti.", e);

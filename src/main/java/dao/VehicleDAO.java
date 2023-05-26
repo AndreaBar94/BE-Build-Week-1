@@ -121,6 +121,26 @@ public class VehicleDAO {
 		Vehicle found = em.find(Vehicle.class, id);
 		return found;
 	}
+	
+	public Vehicle findVehicleWithHighestTicketsValidated() {
+        try {
+            TypedQuery<Vehicle> query = em.createQuery("SELECT v FROM Vehicle v ORDER BY v.ticketsValidated DESC",
+                    Vehicle.class);
+            query.setMaxResults(1);
+
+            List<Vehicle> vehicles = query.getResultList();
+            if (!vehicles.isEmpty()) {
+                Vehicle vehicleWithHighestTickets = vehicles.get(0);
+                log.info("Veicolo che ha vidimato più biglietti: " + vehicleWithHighestTickets.toString());
+                return vehicleWithHighestTickets;
+            }
+
+            return null; // Nessun veicolo presente
+        } catch (Exception e) {
+            log.error("Errore durante la ricerca del veicolo con il valore più alto per ticketsValidated.", e);
+            throw e;
+        }
+    }
 
 	public Vehicle findVehicleWithHighestTicketsValidated() {
 		try {
@@ -155,7 +175,43 @@ public class VehicleDAO {
 			throw e;
 		}
 	}
+	
+	public List<Vehicle> getAllVehiclesInService() {
+	    try {
+	        TypedQuery<Vehicle> query = em.createQuery("SELECT v FROM Vehicle v WHERE v.state = :state", Vehicle.class);
+	        query.setParameter("state", Vehicle.State.IN_SERVICE);
+	        List<Vehicle> vehicles = query.getResultList();
+	        StringBuilder sb = new StringBuilder("Veicoli in servizio:\n");
+	        for (Vehicle vehicle : vehicles) {
+	            sb.append(vehicle.toString()).append("\n");
+	        }
+	        log.info(sb.toString());
+	        return vehicles;
+	    } catch (Exception e) {
+	        log.error("Errore durante il recupero dei veicoli in servizio.", e);
+	        throw e;
+	    }
+	}
 
+	public List<Vehicle> getAllVehiclesUnderMaintenance() {
+	    try {
+	        TypedQuery<Vehicle> query = em.createQuery("SELECT v FROM Vehicle v WHERE v.state = :state", Vehicle.class);
+	        query.setParameter("state", Vehicle.State.UNDER_MAINTENANCE);
+	        List<Vehicle> vehicles = query.getResultList();
+	        StringBuilder sb = new StringBuilder("Veicoli in manutenzione:\n");
+	        for (Vehicle vehicle : vehicles) {
+	            sb.append(vehicle.toString()).append("\n");
+	        }
+	        log.info(sb.toString());
+	        return vehicles;
+	    } catch (Exception e) {
+	        log.error("Errore durante il recupero dei veicoli in manutenzione.", e);
+	        throw e;
+	    }
+	}
+
+
+	
 	public List<Vehicle> getAllBuses() {
 		try {
 			TypedQuery<Vehicle> query = em.createQuery("SELECT v FROM Vehicle v WHERE v.type = :busType GROUP BY v.id",
@@ -279,7 +335,7 @@ public class VehicleDAO {
 	public long docPerVehicleAndDate(Vehicle vehicle, LocalDate startDate, LocalDate endDate) {
 		try {
 			List<Ticket> tickets = getDocumentsByVehicle(vehicle);// fin qui tutto ok
-			int count = (int) tickets.stream()
+			long count = tickets.stream()
 					.filter(ticket -> isWithinDateRange(ticket.getDataVid(), startDate, endDate)).count();
 			log.info("Numero di documenti vidimati per il mezzo selezionato nell'arco di tempo richiesto: " + count);
 			return count;
@@ -303,5 +359,7 @@ public class VehicleDAO {
 	private boolean isWithinDateRange(LocalDate date, LocalDate startDate, LocalDate endDate) {
 		return !date.isBefore(startDate) && !date.isAfter(endDate);
 	}
+	
+	
 
 }
