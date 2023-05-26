@@ -114,7 +114,7 @@ public class Travel_DocumentDAO {
 			List<Travel_Document> documents = getDocumentsByAuthorizedDealer(authorizedDealer);
 			int count = (int) documents.stream()
 					.filter(document -> isWithinDateRange(document.getDataEmissione(), startDate, endDate)).count();
-			log.info("Numero di documenti emessi per il punto di emissione: " + count);
+			log.info("Numero di documenti emessi per il punto di emissione: " + count + "\n");
 			return count;
 		} catch (Exception e) {
 			log.error("Si è verificato un errore durante il conteggio dei documenti.", e);
