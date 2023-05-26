@@ -122,6 +122,26 @@ public class VehicleDAO {
 		return found;
 	}
 
+	public Vehicle findVehicleWithHighestTicketsValidated() {
+		try {
+			TypedQuery<Vehicle> query = em.createQuery("SELECT v FROM Vehicle v ORDER BY v.ticketsValidated DESC",
+					Vehicle.class);
+			query.setMaxResults(1);
+
+			List<Vehicle> vehicles = query.getResultList();
+			if (!vehicles.isEmpty()) {
+				Vehicle vehicleWithHighestTickets = vehicles.get(0);
+				log.info("Veicolo che ha vidimato più biglietti: " + vehicleWithHighestTickets.toString());
+				return vehicleWithHighestTickets;
+			}
+
+			return null; // Nessun veicolo presente
+		} catch (Exception e) {
+			log.error("Errore durante la ricerca del veicolo con il valore più alto per ticketsValidated.", e);
+			throw e;
+		}
+	}
+
 	public List<Vehicle> getAllVehicles() {
 		try {
 			TypedQuery<Vehicle> query = em.createQuery("SELECT v FROM Vehicle v", Vehicle.class);
