@@ -39,6 +39,22 @@ public class Travel_DocumentDAO {
 		}
 
 	}
+	
+	public void update(Travel_Document travelDoc) {
+        EntityTransaction t = em.getTransaction();
+        try {
+            t.begin();
+            em.merge(travelDoc);
+            t.commit();
+            log.info("Titolo di viaggio aggiornato!");
+        } catch (Exception e) {
+            if (t.isActive()) {
+                t.rollback();
+            }
+            log.error("Errore durante l'aggiornamento del documento di viaggio.", e);
+            throw e;
+        }
+    }
 
 	public List<Travel_Document> getAllTd() {
 		try {

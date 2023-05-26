@@ -17,7 +17,11 @@ public class VendingMachine extends AuthorizedDealer{
 
 	private boolean outOfOrder;
 
-
+	public VendingMachine(boolean outOfOrder) {
+		super();
+		this.outOfOrder = outOfOrder;
+	}
+	
 	@Override
 	public String toString() {
 		return "VendingMachine [outOfOrder=" + outOfOrder + "]";
@@ -33,4 +37,5 @@ public class VendingMachine extends AuthorizedDealer{
 	        e.printStackTrace();
 	    }
 	}
+	
 }
