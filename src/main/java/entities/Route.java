@@ -1,16 +1,14 @@
 package entities;
 
+import java.time.Duration;
 import java.util.UUID;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
-import java.util.ArrayList;
-import java.util.List;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -18,28 +16,38 @@ import lombok.Setter;
 @Entity
 @Table(name = "routes")
 @Getter
-@Setter 
+@Setter
 @NoArgsConstructor
 public class Route {
-	
+
 	@Id
 	@GeneratedValue
 	private UUID id;
-	
+
 	private String startPoint;
 	private String terminus;
-	
-	private int avgTime;
-	
-	@OneToOne(mappedBy = "route")
-    private Travel travels;
 
-	public Route(String startPoint, String terminus, int avgTime) {
+	private int avgTime;
+
+	private int numberOfTimes;
+	private Duration travelTime;
+
+	@OneToOne
+	private Vehicle vehicle;
+
+	public Route(String startPoint, String terminus, int avgTime, int numberOfTimes, Duration travelTime) {
 		super();
 		this.startPoint = startPoint;
 		this.terminus = terminus;
 		this.avgTime = avgTime;
+		this.numberOfTimes = numberOfTimes;
+		this.travelTime = travelTime;
 	}
-	
-	
+
+	@Override
+	public String toString() {
+		return "Route{" + "id=" + id + ", startPoint='" + startPoint + '\'' + ", terminus='" + terminus + '\''
+				+ ", avgTime=" + avgTime + ", numberOfTimes=" + numberOfTimes + ", travelTime=" + travelTime + '}';
+	}
+
 }

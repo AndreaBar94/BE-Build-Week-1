@@ -3,22 +3,15 @@ package dao;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Set;
 import java.util.UUID;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 import javax.persistence.TypedQuery;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import entities.AuthorizedDealer;
-import entities.Bus;
 import entities.Card;
 import entities.Public_Transport_Pass;
 import entities.Ticket;
-import entities.Tram;
 import entities.Travel_Document;
 import entities.Vehicle;
 import entities.Vehicle.State;
@@ -47,84 +40,83 @@ public class VehicleDAO {
 			throw e;
 		}
 	}
-//	
-//	public void checkValidity(String idPass, String idCard) {
-//	    Public_Transport_Pass pass = em.find(Public_Transport_Pass.class, UUID.fromString(idPass));
-//	    Card card = em.find(Card.class, UUID.fromString(idCard));
-//	    		
-//	    if (pass.getSubType() == Public_Transport_Pass.SubType.SETTIMANALE && card.isValidità() == true) {
-//	       
-//	        LocalDate dataEmissione = pass.getDataEmissione();
-//	        LocalDate now = LocalDate.now();
-//	        LocalDate expirationDate = dataEmissione.plusWeeks(1);
-//	        
-//	        if (now.isBefore(expirationDate)) {
-//	            System.out.println("L'abbonamento settimanale è ancora valido.");
-//	        } else {
-//	        	pass.setValid(false);
-//	            System.out.println("L'abbonamento settimanale non è più valido.");
-//	        }
-//	    } else if (pass.getSubType() == Public_Transport_Pass.SubType.MENSILE && card.isValidità() == true) {
-//	    
-//	        LocalDate dataEmissione = pass.getDataEmissione();
-//	        LocalDate now = LocalDate.now();
-//	        LocalDate expirationDate = dataEmissione.plusMonths(1); 
-//	        
-//	        if (now.isBefore(expirationDate)) {
-//	            System.out.println("L'abbonamento mensile è ancora valido.");
-//	        } else {
-//	        	pass.setValid(false);
-//	            System.out.println("L'abbonamento mensile non è più valido.");
-//	        }
-//	    } else {
-//	        System.out.println("Card dell'utente scaduta.");
-//	    }
-//	}
-	
-	public void validateTicket(String travelDocID, String vID) {
-	    EntityTransaction transaction = null;
 
-	    try {
-	        transaction = em.getTransaction();
-	        transaction.begin();
+	public void checkValidity(String idPass, String idCard) {
+		Public_Transport_Pass pass = em.find(Public_Transport_Pass.class, UUID.fromString(idPass));
+		Card card = em.find(Card.class, UUID.fromString(idCard));
 
-	        Travel_DocumentDAO tDAO = new Travel_DocumentDAO(em);
-	        Travel_Document td = tDAO.findByUUID(travelDocID);
-	       
-	        if (td instanceof Public_Transport_Pass) {
-	            if (((Public_Transport_Pass) td).isValid()) {
-	                log.info("Pass valido!");
-	            } else {
-	                log.info("Aaaaaaaah facciamo una bella multina qui!");
-	            }
-	        } else if (td instanceof Ticket) {
-	            Ticket ticket = (Ticket) td;
+		if (pass.getSubType() == Public_Transport_Pass.SubType.SETTIMANALE && card.isValidità() == true) {
 
-	            if (!ticket.isEndorsed()) {
-	                Vehicle v = this.getVehicleById(UUID.fromString(vID));
+			LocalDate dataEmissione = pass.getDataEmissione();
+			LocalDate now = LocalDate.now();
+			LocalDate expirationDate = dataEmissione.plusWeeks(1);
 
-	                ticket.setEndorsed(true);
-	                ticket.setDataVid(LocalDate.now());
-	                log.info("Biglietto vidimato!");
+			if (now.isBefore(expirationDate)) {
+				System.out.println("L'abbonamento settimanale è ancora valido.");
+			} else {
+				pass.setValid(false);
+				System.out.println("L'abbonamento settimanale non è più valido.");
+			}
+		} else if (pass.getSubType() == Public_Transport_Pass.SubType.MENSILE && card.isValidità() == true) {
 
-	                v.setTicketsValidated(v.getTicketsValidated() + 1);
-	            } else {
-	                log.info("Aaaaaaaah facciamo una bella multina qui!");
-	            }
-	        } else {
-	            log.info("Niente biglietto o abbonamento? Aaaaaaaah facciamo una bella multina qui!");
-	        }
+			LocalDate dataEmissione = pass.getDataEmissione();
+			LocalDate now = LocalDate.now();
+			LocalDate expirationDate = dataEmissione.plusMonths(1);
 
-	        transaction.commit();
-	    } catch (Exception e) {
-	        if (transaction != null) {
-	            transaction.rollback();
-	        }
-	        log.error("An error occurred during ticket validation: " + e.getMessage());
-	    }
+			if (now.isBefore(expirationDate)) {
+				System.out.println("L'abbonamento mensile è ancora valido.");
+			} else {
+				pass.setValid(false);
+				System.out.println("L'abbonamento mensile non è più valido.");
+			}
+		} else {
+			System.out.println("Card dell'utente scaduta.");
+		}
 	}
 
-	
+	public void validateTicket(String travelDocID, String vID) {
+		EntityTransaction transaction = null;
+
+		try {
+			transaction = em.getTransaction();
+			transaction.begin();
+
+			Travel_DocumentDAO tDAO = new Travel_DocumentDAO(em);
+			Travel_Document td = tDAO.findByUUID(travelDocID);
+
+			if (td instanceof Public_Transport_Pass) {
+				if (((Public_Transport_Pass) td).isValid()) {
+					log.info("Pass valido!");
+				} else {
+					log.info("Aaaaaaaah facciamo una bella multina qui!");
+				}
+			} else if (td instanceof Ticket) {
+				Ticket ticket = (Ticket) td;
+
+				if (!ticket.isEndorsed()) {
+					Vehicle v = this.getVehicleById(UUID.fromString(vID));
+
+					ticket.setEndorsed(true);
+					ticket.setDataVid(LocalDate.now());
+					log.info("Biglietto vidimato!");
+
+					v.setTicketsValidated(v.getTicketsValidated() + 1);
+				} else {
+					log.info("Aaaaaaaah facciamo una bella multina qui!");
+				}
+			} else {
+				log.info("Niente biglietto o abbonamento? Aaaaaaaah facciamo una bella multina qui!");
+			}
+
+			transaction.commit();
+		} catch (Exception e) {
+			if (transaction != null) {
+				transaction.rollback();
+			}
+			log.error("An error occurred during ticket validation: " + e.getMessage());
+		}
+	}
+
 	public Vehicle getVehicleById(UUID id) {
 		Vehicle found = em.find(Vehicle.class, id);
 		return found;
@@ -144,30 +136,34 @@ public class VehicleDAO {
 		}
 	}
 
-	public List<Bus> getAllBuses() {
+	public List<Vehicle> getAllBuses() {
 		try {
-			TypedQuery<Bus> query = em.createQuery("SELECT b FROM Bus b", Bus.class);
-			List<Bus> buses = query.getResultList();
-			for (Bus bus : buses) {
+			TypedQuery<Vehicle> query = em.createQuery("SELECT v FROM Vehicle v WHERE v.type = :busType GROUP BY v.id",
+					Vehicle.class);
+			query.setParameter("busType", Vehicle.Type.BUS);
+			List<Vehicle> buses = query.getResultList();
+			for (Vehicle bus : buses) {
 				log.info(bus.toString());
 			}
 			return buses;
 		} catch (Exception e) {
-			log.error("Errore durante il recupero dei buses.", e);
+			log.error("Errore durante il recupero dei bus.", e);
 			throw e;
 		}
 	}
 
-	public List<Tram> getAllTrams() {
+	public List<Vehicle> getAllTrams() {
 		try {
-			TypedQuery<Tram> query = em.createQuery("SELECT t FROM Tram t", Tram.class);
-			List<Tram> trams = query.getResultList();
-			for (Tram tram : trams) {
+			TypedQuery<Vehicle> query = em.createQuery("SELECT v FROM Vehicle v WHERE v.type = :tramType",
+					Vehicle.class);
+			query.setParameter("tramType", Vehicle.Type.TRAM);
+			List<Vehicle> trams = query.getResultList();
+			for (Vehicle tram : trams) {
 				log.info(tram.toString());
 			}
 			return trams;
 		} catch (Exception e) {
-			log.error("Errore durante il recupero dei trams.", e);
+			log.error("Errore durante il recupero dei tram.", e);
 			throw e;
 		}
 	}
@@ -259,36 +255,33 @@ public class VehicleDAO {
 			throw e;
 		}
 	}
-	
+
 	public long docPerVehicleAndDate(Vehicle vehicle, LocalDate startDate, LocalDate endDate) {
 		try {
-			List<Ticket> tickets = getDocumentsByVehicle(vehicle);//fin qui tutto ok
-            int count =(int) tickets.stream()
-                    .filter(ticket -> isWithinDateRange(ticket.getDataVid(), startDate, endDate))
-                    .count();
-            log.info("Numero di documenti vidimati per il mezzo selezionato nell'arco di tempo richiesto: " + count);
-            return count;
-        } catch (Exception e) {
-            log.error("Si è verificato un errore durante il conteggio dei biglietti.", e);
-            return 0;
-        }
+			List<Ticket> tickets = getDocumentsByVehicle(vehicle);// fin qui tutto ok
+			int count = (int) tickets.stream()
+					.filter(ticket -> isWithinDateRange(ticket.getDataVid(), startDate, endDate)).count();
+			log.info("Numero di documenti vidimati per il mezzo selezionato nell'arco di tempo richiesto: " + count);
+			return count;
+		} catch (Exception e) {
+			log.error("Si è verificato un errore durante il conteggio dei biglietti.", e);
+			return 0;
+		}
 	}
-	
 
 	private List<Ticket> getDocumentsByVehicle(Vehicle vehicle) {
-        try {
-        	List<Ticket> found = vehicle.getTicketsList();
+		try {
+			List<Ticket> found = vehicle.getTicketsList();
 			return found;
 		} catch (Exception e) {
-			 log.error("Si è verificato un errore durante il conteggio dei documenti.", e);
-	            return null;
+			log.error("Si è verificato un errore durante il conteggio dei documenti.", e);
+			return null;
 		}
-  
-    }
-    
-    private boolean isWithinDateRange(LocalDate date, LocalDate startDate, LocalDate endDate) {
-        return !date.isBefore(startDate) && !date.isAfter(endDate);
-    }
 
-	
+	}
+
+	private boolean isWithinDateRange(LocalDate date, LocalDate startDate, LocalDate endDate) {
+		return !date.isBefore(startDate) && !date.isAfter(endDate);
+	}
+
 }

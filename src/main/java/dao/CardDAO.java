@@ -7,36 +7,35 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 import javax.persistence.TypedQuery;
 
-import org.slf4j.LoggerFactory;
-
-import ch.qos.logback.classic.Logger;
 import entities.Card;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class CardDAO {
-	
+
 	private final EntityManager em;
 
 	public CardDAO(EntityManager em) {
 		this.em = em;
 	}
-	
+
 	public List<Card> getAllCard() {
 		try {
-			TypedQuery<Card> query = em.createQuery("SELECT c FROM card c", Card.class);
-			List<Card> cards = query.getResultList();
-			for(Card c : cards) {
-				log.info(c.toString());
-			};
-			return cards;
+			TypedQuery<Card> query = em.createQuery("SELECT c FROM Card c", Card.class);
+			List<Card> cardList = query.getResultList();
+			StringBuilder cards = new StringBuilder("Lista Tessere:\n");
+			for (Card card : cardList) {
+				cards.append(card.toString()).append("\n");
+			}
+			log.info(cards.toString());
+			return cardList;
 		} catch (Exception e) {
 			log.error("error: " + e);
 			throw e;
 		}
-		
+
 	};
-	
+
 	public void saveCard(Card a) {
 		EntityTransaction t = em.getTransaction();
 		try {
@@ -44,15 +43,15 @@ public class CardDAO {
 			em.persist(a);
 			t.commit();
 			log.info("Card saved!!");
-			
+
 		} catch (Exception e) {
 			log.error("error: " + e);
 		}
 	}
-	
-	public void deleteCard( UUID id) {
+
+	public void deleteCard(UUID id) {
 		EntityTransaction t = em.getTransaction();
-		
+
 		try {
 			t.begin();
 			Card card = em.find(Card.class, id);
@@ -63,7 +62,7 @@ public class CardDAO {
 			log.error("error: " + e);
 		}
 	};
-	
+
 	public Card findById(String id) {
 		Card found = em.find(Card.class, UUID.fromString(id));
 		return found;

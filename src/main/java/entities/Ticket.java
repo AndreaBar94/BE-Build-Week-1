@@ -16,25 +16,29 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class Ticket extends Travel_Document{
+public class Ticket extends Travel_Document {
 
-	
 	@ManyToOne
 	@JoinColumn(name = "user_id")
 	private User user;
-	
+
 	@ManyToOne
 	@JoinColumn(name = "vehicle_id")
 	private Vehicle vehicle;
 
 	private LocalDate dataVid;
 	private boolean endorsed;
-	
-	public Ticket(LocalDate dataEmissione,  AuthorizedDealer puntoEmissione, boolean endorsed, User u) {
+
+	public Ticket(LocalDate dataEmissione, AuthorizedDealer puntoEmissione, boolean endorsed, User u) {
 		super(dataEmissione, puntoEmissione);
 		this.endorsed = endorsed;
 		this.user = u;
 	}
-		
-	
+
+	@Override
+	public String toString() {
+		return "Titolo n°: " + id + " data di emissione: " + dataEmissione + " , Punto di emissione: " + puntoEmissione
+				+ " Timbrato: " + endorsed + " , Acquistato dall' " + user;
+	};
+
 }
